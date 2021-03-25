@@ -1,4 +1,4 @@
-package com.wtrue.sprica.domain;
+package com.wtrue.sprica.common.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

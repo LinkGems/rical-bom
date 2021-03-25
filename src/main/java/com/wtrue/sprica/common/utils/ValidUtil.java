@@ -1,4 +1,4 @@
-package com.wtrue.sprica.utils;
+package com.wtrue.sprica.common.utils;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.wtrue.sprica.domain;
+package com.wtrue.sprica.common.domain;
 
 import lombok.Data;
 
