@@ -8,14 +8,14 @@ import lombok.Data;
  * @date: 2021/3/21 8:24 PM
  */
 @Data
-public class ValidUtil {
+public class Validate {
 
     private boolean valid = true;
     private String msg;
 
     private String notNullMsg = " should not be null.";
 
-    public ValidUtil notNull(Object obj, String... params){
+    public Validate notNull(Object obj, String... params){
         if(!valid){
             return this;
         }
