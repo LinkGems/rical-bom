@@ -1,6 +1,7 @@
 package com.wtrue.sprica.common.utils;
 
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @description:
@@ -13,26 +14,76 @@ public class ValidUtil {
     private boolean valid = true;
     private String msg;
 
-    private String notNullMsg = " should not be null.";
-
-    public ValidUtil notNull(Object obj, String... params){
+    /**
+     * 判空
+     * @param name
+     * @param obj
+     * @return
+     */
+    public ValidUtil notNull(String name, Object obj){
         if(!valid){
             return this;
         }
         if(obj == null){
             valid = false;
-            String objName = obj.getClass().getName();
-            msg = objName + notNullMsg;
-            return this;
-        }
-        if(params != null && params.length > 0){
-            Class<?> objClass = obj.getClass();
-            for(String param : params){
-
+            msg = name + " should not be null";
+        }else{
+            if(obj instanceof String && StringUtils.isBlank((CharSequence) obj)){
+                valid = false;
+                msg = name + " should not be blank";
             }
         }
         return this;
     }
 
+    /**
+     * 需大于
+     * @param name
+     * @param obj
+     * @param min
+     * @return
+     */
+    public ValidUtil moreThen(String name, Object obj, Integer min){
+        notNull(name,obj);
+        if(!valid){
+            return this;
+        }
+        if(StringUtils.isNumeric(obj.toString())){
+            Integer target = Integer.valueOf(obj.toString());
+            if(target <= min){
+                valid = false;
+                msg = name + " should more then " + min;
+            }
+        }else{
+            valid = false;
+            msg = name + " is not a number";
+        }
+        return this;
+    }
+
+    /**
+     * 需小于
+     * @param name
+     * @param obj
+     * @param max
+     * @return
+     */
+    public ValidUtil lessThen(String name, Object obj, Integer max){
+        notNull(name,obj);
+        if(!valid){
+            return this;
+        }
+        if(StringUtils.isNumeric(obj.toString())){
+            Integer target = Integer.valueOf(obj.toString());
+            if(target > max){
+                valid = false;
+                msg = name + " should less then " + max;
+            }
+        }else{
+            valid = false;
+            msg = name + " is not a number";
+        }
+        return this;
+    }
 
 }
