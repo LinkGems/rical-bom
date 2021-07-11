@@ -1,6 +1,7 @@
 package com.wtrue.sprica.common.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @description:
@@ -8,9 +9,12 @@ import lombok.Data;
  * @date: 2021/3/21 8:13 PM
  */
 @Data
-public class BaseResponse extends BaseObject{
+@EqualsAndHashCode(callSuper = true)
+public class BaseResponse<T> extends BaseObject{
 
     private boolean success = true;
+
+    private T data;
 
     private BaseError error;
 
