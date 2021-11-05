@@ -1,4 +1,4 @@
-package com.wtrue.sprica.common.utils;
+package com.wtrue.rical.common.utils;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package com.wtrue.sprica.common.domain;
+package com.wtrue.rical.common.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

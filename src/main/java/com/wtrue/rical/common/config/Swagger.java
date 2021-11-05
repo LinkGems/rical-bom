@@ -1,4 +1,4 @@
-package com.wtrue.sprica.common.config;
+package com.wtrue.rical.common.config;
 
 import lombok.Builder;
 import springfox.documentation.builders.ApiInfoBuilder;
