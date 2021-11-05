@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.utils;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -82,8 +83,14 @@ public class UUIDUtil {
      *
      * @return the new UUID
      */
-    private static UUID createUUID() {
-        long timeMillis = (System.currentTimeMillis() * 10000) + 0x01B21DD213814000L;
+    private static UUID createUUID(){
+        long timeMillis;
+
+        try {
+            timeMillis = (DateUtil.curTime().getTime() * 10000) + 0x01B21DD213814000L;
+        } catch (IOException e) {
+            timeMillis = (System.currentTimeMillis() * 10000) + 0x01B21DD213814000L;
+        }
 
         lock.lock();
         try {
@@ -103,7 +110,7 @@ public class UUIDUtil {
         mostSigBits |= (timeMillis & 0xFFFF00000000L) >> 16;
 
         // time hi and version
-        mostSigBits |= 0x1000 | ((timeMillis >> 48) & 0x0FFF); // version 1
+        mostSigBits |= 0x1000 | ((timeMillis >> 48) & 0x0FFF);
 
         return new UUID(mostSigBits, leastSigBits);
     }
