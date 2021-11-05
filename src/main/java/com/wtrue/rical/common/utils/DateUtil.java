@@ -1,4 +1,4 @@
-package com.wtrue.sprica.common.utils;
+package com.wtrue.rical.common.utils;
 
 import java.io.IOException;
 import java.net.URL;
