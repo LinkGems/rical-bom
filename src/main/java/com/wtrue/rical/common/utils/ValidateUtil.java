@@ -1,9 +1,7 @@
 package com.wtrue.rical.common.utils;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wtrue.rical.common.domain.BaseError;
+import com.wtrue.rical.common.enums.ErrorEnum;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -16,12 +14,10 @@ import java.util.function.Supplier;
  * @author: meidanlong
  * @date: 2021/3/21 8:24 PM
  */
-@Getter
-@Setter
 public class ValidateUtil {
 
     private boolean valid = true;
-    private String msg = "validate pass";
+    private BaseError error = new BaseError();
     private String baseObjectName;
     private Object baseObject;
     private Map<String, Object> localValues = new HashMap();
@@ -32,7 +28,8 @@ public class ValidateUtil {
      * 无基础对象，不能用于对象属性（field）判断
      * 可搭配表达式校验使用
      */
-    public ValidateUtil(){}
+    public ValidateUtil(){
+    }
 
     /**
      * 有参构造函数，传入对象用于初始化
@@ -43,13 +40,11 @@ public class ValidateUtil {
         try {
             baseObject = sup.get();
             if(baseObject == null){
-                this.valid = false;
-                this.msg = "'"+objName+"' is null";
+                populateError("'"+objName+"' is null");
             }
             baseObjectName = objName;
         }catch (NullPointerException npe){
-            this.valid = false;
-            this.msg = "NPE in the process of getting '"+objName+"'";
+            populateError("NPE in the process of getting '"+objName+"'");
         }
     }
 
@@ -74,21 +69,16 @@ public class ValidateUtil {
             field.setAccessible(true);
             Object fieldValue = field.get(baseObject);
             if(fieldValue == null){
-                this.setValid(false);
-                this.setMsg("'"+fieldName+"' of '"+baseObjectName+"' should not be null");
-                this.setMsg("'"+baseObjectName+"#"+fieldName+"' should not be null");
+                populateError("'"+baseObjectName+"#"+fieldName+"' should not be null");
             }else if(fieldValue instanceof String && StringUtil.isEmpty((String) fieldValue)){
-                this.setValid(false);
-                this.setMsg("'"+baseObjectName+"#"+fieldName+"' should not be empty");
+                populateError("'"+baseObjectName+"#"+fieldName+"' should not be empty");
             }else if(fieldValue instanceof List && ((List<?>) fieldValue).size() <= 0){
-                this.setValid(false);
-                this.setMsg("'"+baseObjectName+"#"+fieldName+"' should not be empty");
+                populateError("'"+baseObjectName+"#"+fieldName+"' should not be empty");
             }else{
                 this.localValues.put(fieldName, fieldValue);
             }
         } catch (NoSuchFieldException e) {
-            this.setValid(false);
-            this.setMsg("there is not a filed named '"+baseObjectName+"#"+fieldName+"'");
+            populateError("there is not a filed named '"+baseObjectName+"#"+fieldName+"'");
 //            e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -111,12 +101,10 @@ public class ValidateUtil {
         if(localValues.get(fieldName) instanceof String){
             String toValidate = localValues.get(fieldName).toString();
             if(toValidate.length() > max){
-                this.setValid(false);
-                this.setMsg("length of '"+baseObjectName+"#"+fieldName+"' should less then '"+max+"'");
+                populateError("length of '"+baseObjectName+"#"+fieldName+"' should less then '"+max+"'");
             }
         }else{
-            this.setValid(false);
-            this.setMsg("'"+baseObjectName+"#"+fieldName+"' is not a string");
+            populateError("'"+baseObjectName+"#"+fieldName+"' is not a string");
         }
 
         return this;
@@ -137,12 +125,10 @@ public class ValidateUtil {
         try {
             Long toValidate = Long.valueOf(localValues.get(fieldName).toString());
             if(toValidate > max){
-                this.setValid(false);
-                this.setMsg("value of '"+baseObjectName+"#"+fieldName+"' should less then '"+max+"'");
+                populateError("value of '"+baseObjectName+"#"+fieldName+"' should less then '"+max+"'");
             }
         }catch (NumberFormatException e){
-            this.setValid(false);
-            this.setMsg("'"+baseObjectName+"#"+fieldName+"' can not cast to Long");
+            populateError("'"+baseObjectName+"#"+fieldName+"' can not cast to Long");
         }
         return this;
     }
@@ -162,12 +148,10 @@ public class ValidateUtil {
         try {
             Long toValidate = Long.valueOf(localValues.get(fieldName).toString());
             if(toValidate < min){
-                this.setValid(false);
-                this.setMsg("value of '"+baseObjectName+"#"+fieldName+"' should more then '"+min+"'");
+                populateError("value of '"+baseObjectName+"#"+fieldName+"' should more then '"+min+"'");
             }
         }catch (NumberFormatException e){
-            this.setValid(false);
-            this.setMsg("'"+baseObjectName+"#"+fieldName+"' can not cast to Long");
+            populateError("'"+baseObjectName+"#"+fieldName+"' can not cast to Long");
         }
         return this;
     }
@@ -205,12 +189,10 @@ public class ValidateUtil {
         try{
             List list = (List) localValues.get(fieldName);
             if(list.size()>max){
-                this.setValid(false);
-                this.setMsg("size of '"+baseObjectName+"#"+fieldName+"' should less then '"+max+"'");
+                populateError("size of '"+baseObjectName+"#"+fieldName+"' should less then '"+max+"'");
             }
         }catch (Exception e){
-            this.setValid(false);
-            this.setMsg("'"+baseObjectName+"#"+fieldName+"' can not cast to List");
+            populateError("'"+baseObjectName+"#"+fieldName+"' can not cast to List");
         }
         return this;
     }
@@ -235,14 +217,12 @@ public class ValidateUtil {
             }else{
                 Long offset = Long.valueOf(offsetObj.toString());
                 if(offset < 0){
-                    this.setValid(false);
-                    this.setMsg("value of '"+baseObjectName+"#offset' should more then '0'");
+                    populateError("value of '"+baseObjectName+"#offset' should more then '0'");
                     return this;
                 }
             }
         } catch (NoSuchFieldException e) {
-            this.setValid(false);
-            this.setMsg("there is not a filed named '"+baseObjectName+"#offset'");
+            populateError("there is not a filed named '"+baseObjectName+"#offset'");
             return this;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -258,14 +238,12 @@ public class ValidateUtil {
             }else{
                 Integer limit = Integer.valueOf(limitObj.toString());
                 if(limit < 1 || limit > 100){
-                    this.setValid(false);
-                    this.setMsg("value of '"+baseObjectName+"#limit' should between '1' and '100', [1,100]");
+                    populateError("value of '"+baseObjectName+"#limit' should between '1' and '100', [1,100]");
                     return this;
                 }
             }
         } catch (NoSuchFieldException e) {
-            this.setValid(false);
-            this.setMsg("there is not a filed named '"+baseObjectName+"#limit'");
+            populateError("there is not a filed named '"+baseObjectName+"#limit'");
             return this;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -288,17 +266,32 @@ public class ValidateUtil {
         try {
             Boolean obj = sup.get();
             if(obj == null){
-                this.valid = false;
-                this.msg = "'"+baseObjectName+"#"+expressionName+"' expression is null";
+                populateError("'"+baseObjectName+"#"+expressionName+"' expression is null");
             }
             if(!obj){
-                this.valid = false;
-                this.msg = "'"+baseObjectName+"#"+expressionName+"' expression is illegal";
+                populateError("'"+baseObjectName+"#"+expressionName+"' expression is illegal");
             }
         }catch (NullPointerException npe){
-            this.valid = false;
-            this.msg = "NPE in the process of getting '"+baseObjectName+"#"+expressionName+"' expression";
+            populateError("NPE in the process of getting '"+baseObjectName+"#"+expressionName+"' expression");
         }
         return this;
+    }
+
+    /**
+     * 填充BaseError异常
+     * @param msg
+     */
+    private void populateError(String msg){
+        this.valid = false;
+        this.error.setCode(ErrorEnum.PARAM_ERROR.getCode());
+        this.error.setMessage(msg);
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public BaseError getError() {
+        return error;
     }
 }
