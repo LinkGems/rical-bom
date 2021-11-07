@@ -87,7 +87,7 @@ public class UUIDUtil {
         long timeMillis;
 
         try {
-            timeMillis = (DateUtil.curTime().getTime() * 10000) + 0x01B21DD213814000L;
+            timeMillis = (DateTimeUtil.curTime().getTime() * 10000) + 0x01B21DD213814000L;
         } catch (IOException e) {
             timeMillis = (System.currentTimeMillis() * 10000) + 0x01B21DD213814000L;
         }
