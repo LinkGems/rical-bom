@@ -5,12 +5,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 /**
  * @description:
  * @author: meidanlong
  * @date: 2021/3/21 7:45 PM
  */
-public class BaseObject {
+public class BaseObject implements Serializable {
 
     private static final long serialVersionUID = -1076131341555304L;
 

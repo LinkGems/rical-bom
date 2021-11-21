@@ -16,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,6 +129,13 @@ public class HttpUtil {
             }
         }
         return resultString;
+    }
+
+    public static void main(String[] args) {
+        Map<String, String> m = new HashMap<>();
+        m.put("appName", "test");
+        String s = HttpUtil.doPost("http://localhost:8001/job/handler/register", m);
+        System.out.println(s);
     }
 
 }
