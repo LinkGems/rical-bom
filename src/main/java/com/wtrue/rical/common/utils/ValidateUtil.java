@@ -294,4 +294,19 @@ public class ValidateUtil {
     public BaseError getError() {
         return error;
     }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
+    public void setError(BaseError error) {
+        this.setValid(false);
+        this.error = error;
+    }
+
+    public void setError(Integer code, String message) {
+        this.setValid(false);
+        this.error.setCode(code);
+        this.error.setMessage(message);
+    }
 }

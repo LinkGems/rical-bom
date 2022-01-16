@@ -18,4 +18,18 @@ public class BaseResponse<T> extends BaseObject{
 
     private BaseError error;
 
+    public BaseResponse<T> populateResponse(T data){
+        BaseResponse<T> resp = new BaseResponse<T>();
+        if(data != null){
+            resp.setData(data);
+        }else{
+            resp.setSuccess(false);
+            BaseError error = new BaseError();
+            error.setCode(1);
+            error.setMessage("sth. wrong when queryJobById");
+            resp.setError(error);
+        }
+        return resp;
+    }
+
 }
