@@ -114,32 +114,43 @@ public class ValidUtil {
         if(!this.valid){
             return this;
         }
-        Object curObj = curValidObj.getCurObj();
-        String curObjName = curValidObj.getCurObjName();
-        if(curObj == null || StringUtil.isEmpty(curObjName)){
-            populateError("curObj is null or curObjName is empty");
-            return this;
-        }
+//        Object curObj = curValidObj.getCurObj();
+//        String curObjName = curValidObj.getCurObjName();
+//        if(curObj == null || StringUtil.isEmpty(curObjName)){
+//            populateError("curObj is null or curObjName is empty");
+//            return this;
+//        }
         // main
+        Object fieldValue = getFieldValue(fieldName);
+        if(fieldValue == null){
+            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be null");
+        }else if(fieldValue instanceof String && StringUtil.isEmpty((String) fieldValue)){
+            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be empty");
+        }else if(fieldValue instanceof List && ((List<?>) fieldValue).size() <= 0){
+            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be empty");
+        }else{
+            setMapValue(fieldName, fieldValue);
+        }
+        return this;
+    }
+
+    /**
+     * 获取属性值
+     * @param fieldName
+     * @return
+     */
+    private Object getFieldValue(String fieldName){
         try {
-            Field field = curObj.getClass().getDeclaredField(fieldName);
+            Object curObj = curValidObj.getCurObj();
+            Field field = curValidObj.getCurObj().getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
-            Object fieldValue = field.get(curObj);
-            if(fieldValue == null){
-                populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be null");
-            }else if(fieldValue instanceof String && StringUtil.isEmpty((String) fieldValue)){
-                populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be empty");
-            }else if(fieldValue instanceof List && ((List<?>) fieldValue).size() <= 0){
-                populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be empty");
-            }else{
-                setMapValue(fieldName, fieldValue);
-            }
+            return field.get(curObj);
         } catch (NoSuchFieldException e) {
             populateError("there is not a filed named '"+ curValidObj.getCurObjName()+"#"+fieldName+"'");
         } catch (IllegalAccessException e) {
             populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' access illegal");
         }
-        return this;
+        return null;
     }
 
     /**
@@ -326,17 +337,34 @@ public class ValidUtil {
      */
     public ValidUtil ifAIsBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         // assert
-        if(!this.valid || !notNull(fieldNameA, fieldNameC).isValid()){
-            return this;
-        }
-        if(expectValueB == null || expectValueD ==null){
-            populateError("expectValue of %s or expectValue of %s is null", fieldNameA, fieldNameC);
+        if(!this.valid){
             return this;
         }
         // main
-        if(JSON.toJSONString(expectValueB).equals(JSON.toJSONString(getMapValue(fieldNameA)))
-                && !JSON.toJSONString(expectValueD).equals(JSON.toJSONString(getMapValue(fieldNameC)))){
+        if(JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && !JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
             populateError("%s is %s, but %s is not %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
+        }
+        return this;
+    }
+
+    /**
+     * 如果A的值不为B，那么C的值必须为D
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @param expectValueD
+     * @return
+     */
+    public ValidUtil ifAIsNotBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+        // assert
+        if(!this.valid){
+            return this;
+        }
+        // main
+        if(!JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && !JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
+            populateError("%s is not %s, but %s is not %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
         }
         return this;
     }
@@ -351,17 +379,34 @@ public class ValidUtil {
      */
     public ValidUtil ifAIsBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         // assert
-        if(!this.valid || !notNull(fieldNameA, fieldNameC).isValid()){
-            return this;
-        }
-        if(expectValueB == null || expectValueD ==null){
-            populateError("expectValue of %s or expectValue of %s is null", fieldNameA, fieldNameC);
+        if(!this.valid){
             return this;
         }
         // main
-        if(JSON.toJSONString(expectValueB).equals(JSON.toJSONString(getMapValue(fieldNameA)))
-                && JSON.toJSONString(expectValueD).equals(JSON.toJSONString(getMapValue(fieldNameC)))){
+        if(JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
             populateError("%s is %s, but %s is %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
+        }
+        return this;
+    }
+
+    /**
+     * 如果A的值为B，那么C的值必须不能为D
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @param expectValueD
+     * @return
+     */
+    public ValidUtil ifAIsNotBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+        // assert
+        if(!this.valid){
+            return this;
+        }
+        // main
+        if(!JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
+            populateError("%s is not %s, but %s is %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
         }
         return this;
     }
