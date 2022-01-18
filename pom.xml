@@ -17,6 +17,7 @@
         <joda-time.version>2.10.13</joda-time.version>
         <httpcore.version>4.4.10</httpcore.version>
         <httpclient.version>4.5.6</httpclient.version>
+        <fastjson.version>1.2.69</fastjson.version>
     </properties>
 
     <dependencies>
@@ -65,6 +66,13 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
+        </dependency>
+
+        <!-- json -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
     </dependencies>
 
