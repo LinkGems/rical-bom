@@ -2,11 +2,13 @@ package com.wtrue.rical.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.wtrue.rical.common.domain.BaseError;
-import com.wtrue.rical.common.domain.ValidObj;
+import com.wtrue.rical.common.domain.BaseObject;
 import com.wtrue.rical.common.enums.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -19,7 +21,7 @@ import java.util.function.Supplier;
  * @date: 2021/3/21 8:24 PM
  */
 @Slf4j
-public class ValidUtil {
+public class ValidUtil implements InvocationHandler {
 
     private boolean valid = true;
     private BaseError error = new BaseError();
@@ -87,6 +89,21 @@ public class ValidUtil {
     }
 
     /**
+     * 获取同级对象
+     * @return
+     */
+    public ValidUtil supSub(String fieldName){
+        // assert
+        if(!this.valid){
+            return this;
+        }
+        // main
+        sup();
+        sub(fieldName);
+        return this;
+    }
+
+    /**
      * 批量判空
      * @param fieldNames
      * @return
@@ -114,20 +131,14 @@ public class ValidUtil {
         if(!this.valid){
             return this;
         }
-//        Object curObj = curValidObj.getCurObj();
-//        String curObjName = curValidObj.getCurObjName();
-//        if(curObj == null || StringUtil.isEmpty(curObjName)){
-//            populateError("curObj is null or curObjName is empty");
-//            return this;
-//        }
         // main
         Object fieldValue = getFieldValue(fieldName);
         if(fieldValue == null){
-            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be null");
+            populateError("'%s#%s' should not be null", curValidObj.getCurObjName(), fieldName);
         }else if(fieldValue instanceof String && StringUtil.isEmpty((String) fieldValue)){
-            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be empty");
+            populateError("'%s#%s' should not be empty", curValidObj.getCurObjName(), fieldName);
         }else if(fieldValue instanceof List && ((List<?>) fieldValue).size() <= 0){
-            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' should not be empty");
+            populateError("'%s#%s' should not be empty", curValidObj.getCurObjName(), fieldName);
         }else{
             setMapValue(fieldName, fieldValue);
         }
@@ -146,9 +157,9 @@ public class ValidUtil {
             field.setAccessible(true);
             return field.get(curObj);
         } catch (NoSuchFieldException e) {
-            populateError("there is not a filed named '"+ curValidObj.getCurObjName()+"#"+fieldName+"'");
+            populateError("there is not a filed named '%s#%s'", curValidObj.getCurObjName(), fieldName);
         } catch (IllegalAccessException e) {
-            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' access illegal");
+            populateError("'%s#%s' access illegal", curValidObj.getCurObjName(), fieldName);
         }
         return null;
     }
@@ -169,7 +180,7 @@ public class ValidUtil {
         if(value instanceof String){
             String toValidate = value.toString();
             if(toValidate.length() > max){
-                populateError("length of '"+ curValidObj.getCurObjName()+"#"+fieldName+"' should less then '"+max+"'");
+                populateError("length of '%s#%s' should less then '%s'", curValidObj.getCurObjName(), fieldName, String.valueOf(max));
             }
         }else{
             populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' is not a string");
@@ -193,10 +204,10 @@ public class ValidUtil {
         try {
             Long toValidate = Long.valueOf(getMapValue(fieldName).toString());
             if(toValidate > max){
-                populateError("value of '"+ curValidObj.getCurObjName()+"#"+fieldName+"' should less then '"+max+"'");
+                populateError("value of '%s#%s' should less then '%s'", curValidObj.getCurObjName(), fieldName, String.valueOf(max));
             }
         }catch (NumberFormatException e){
-            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' can not cast to Long");
+            populateError("'%s#%s' can not cast to Long", curValidObj.getCurObjName(), fieldName);
         }
         return this;
     }
@@ -216,10 +227,10 @@ public class ValidUtil {
         try {
             Long toValidate = Long.valueOf(getMapValue(fieldName).toString());
             if(toValidate < min){
-                populateError("value of '"+ curValidObj.getCurObjName()+"#"+fieldName+"' should more then '"+min+"'");
+                populateError("value of '%s#%s' should more then '%s'", curValidObj.getCurObjName(), fieldName, String.valueOf(min));
             }
         }catch (NumberFormatException e){
-            populateError("'"+ curValidObj.getCurObjName()+"#"+fieldName+"' can not cast to Long");
+            populateError("'%s#%s' can not cast to Long", curValidObj.getCurObjName(), fieldName);
         }
         return this;
     }
@@ -411,6 +422,38 @@ public class ValidUtil {
         return this;
     }
 
+    // 工具集
+
+    private Map<String, Object> getMap(){
+        ValidObj curValidObj = objStack.peek();
+        return curValidObj.getFieldsData();
+    }
+
+    private void setMap(Map<String, Object> map){
+        ValidObj curValidObj = objStack.peek();
+        curValidObj.setFieldsData(map);
+    }
+
+    private void setMapValue(String fieldName, Object obj){
+        ValidObj curValidObj = objStack.peek();
+        Map<String, Object> fieldsData = curValidObj.getFieldsData();
+        if(fieldsData == null){
+            fieldsData = new ConcurrentHashMap<>();
+        }
+        fieldsData.put(fieldName, obj);
+        curValidObj.setFieldsData(fieldsData);
+    }
+
+    private Object getMapValue(String fieldName){
+        ValidObj curValidObj = objStack.peek();
+        Map<String, Object> fieldsData = curValidObj.getFieldsData();
+        if(fieldsData == null){
+            notNull(fieldName);
+        }
+        return fieldsData.get(fieldName);
+    }
+
+    // getter and setter
 
     /**
      * 填充BaseError异常
@@ -444,32 +487,51 @@ public class ValidUtil {
         this.error.setMessage(message);
     }
 
-    private Map<String, Object> getMap(){
-        ValidObj curValidObj = objStack.peek();
-        return curValidObj.getFieldsData();
+    // 动态代理
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("Before invoke "  + method.getName());
+//        method.invoke(object, args);
+        System.out.println("After invoke " + method.getName());
+        return null;
+    }
+}
+
+class ValidObj extends BaseObject {
+
+    private String curObjName;
+
+    private Object curObj;
+
+    private Map<String, Object> fieldsData = new ConcurrentHashMap<>();
+
+    public ValidObj(String curObjName, Object curObj) {
+        this.curObjName = curObjName;
+        this.curObj = curObj;
     }
 
-    private void setMap(Map<String, Object> map){
-        ValidObj curValidObj = objStack.peek();
-        curValidObj.setFieldsData(map);
+    public String getCurObjName() {
+        return curObjName;
     }
 
-    private void setMapValue(String fieldName, Object obj){
-        ValidObj curValidObj = objStack.peek();
-        Map<String, Object> fieldsData = curValidObj.getFieldsData();
-        if(fieldsData == null){
-            fieldsData = new ConcurrentHashMap<>();
-        }
-        fieldsData.put(fieldName, obj);
-        curValidObj.setFieldsData(fieldsData);
+    public void setCurObjName(String curObjName) {
+        this.curObjName = curObjName;
     }
 
-    private Object getMapValue(String fieldName){
-        ValidObj curValidObj = objStack.peek();
-        Map<String, Object> fieldsData = curValidObj.getFieldsData();
-        if(fieldsData == null){
-            notNull(fieldName);
-        }
-        return fieldsData.get(fieldName);
+    public Object getCurObj() {
+        return curObj;
+    }
+
+    public void setCurObj(Object curObj) {
+        this.curObj = curObj;
+    }
+
+    public Map<String, Object> getFieldsData() {
+        return fieldsData;
+    }
+
+    public void setFieldsData(Map<String, Object> fieldsData) {
+        this.fieldsData = fieldsData;
     }
 }
