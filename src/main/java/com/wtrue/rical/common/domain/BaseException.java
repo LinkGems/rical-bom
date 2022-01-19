@@ -1,5 +1,7 @@
 package com.wtrue.rical.common.domain;
 
+import com.wtrue.rical.common.enums.ErrorEnum;
+
 /**
  * @description:
  * @author: meidanlong
@@ -7,5 +9,29 @@ package com.wtrue.rical.common.domain;
  */
 public class BaseException extends RuntimeException{
 
+    private Integer code;
+
+    private String message;
+
+    public BaseException() {
+    }
+
+    public BaseException(Integer code, String message) {
+        super("code:" + code + " message:" + message);
+        this.code = code;
+        this.message = message;
+    }
+
+    public BaseException(ErrorEnum errorEnum) {
+        super("code:" + errorEnum.getCode() + " message:" + errorEnum.getDesc());
+        this.code = errorEnum.getCode();
+        this.message = errorEnum.getDesc();
+    }
+
+    public BaseException(BaseError baseError) {
+        super("code:" + baseError.getCode() + " message:" + baseError.getMessage());
+        this.code = baseError.getCode();
+        this.message = baseError.getMessage();
+    }
 
 }
