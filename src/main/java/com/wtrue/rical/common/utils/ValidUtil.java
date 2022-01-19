@@ -164,6 +164,94 @@ public class ValidUtil implements InvocationHandler {
         return null;
     }
 
+    // 常规校验
+
+    /**
+     * 如果A的值为B，那么C的值必须为D
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @param expectValueD
+     * @return
+     */
+    public ValidUtil ifAIsBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+        // assert
+        if(!this.valid){
+            return this;
+        }
+        // main
+        if(JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && !JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
+            populateError("%s is %s, but %s is not %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
+        }
+        return this;
+    }
+
+    /**
+     * 如果A的值不为B，那么C的值必须为D
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @param expectValueD
+     * @return
+     */
+    public ValidUtil ifAIsNotBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+        // assert
+        if(!this.valid){
+            return this;
+        }
+        // main
+        if(!JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && !JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
+            populateError("%s is not %s, but %s is not %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
+        }
+        return this;
+    }
+
+    /**
+     * 如果A的值为B，那么C的值必须不能为D
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @param expectValueD
+     * @return
+     */
+    public ValidUtil ifAIsBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+        // assert
+        if(!this.valid){
+            return this;
+        }
+        // main
+        if(JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
+            populateError("%s is %s, but %s is %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
+        }
+        return this;
+    }
+
+    /**
+     * 如果A的值为B，那么C的值必须不能为D
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @param expectValueD
+     * @return
+     */
+    public ValidUtil ifAIsNotBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+        // assert
+        if(!this.valid){
+            return this;
+        }
+        // main
+        if(!JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
+                && JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
+            populateError("%s is not %s, but %s is %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
+        }
+        return this;
+    }
+
+    // 特殊校验
+
     /**
      * 对象属性字符长度校验
      * @param fieldName
@@ -338,89 +426,6 @@ public class ValidUtil implements InvocationHandler {
         return this;
     }
 
-    /**
-     * 如果A的值为B，那么C的值必须为D
-     * @param fieldNameA
-     * @param expectValueB
-     * @param fieldNameC
-     * @param expectValueD
-     * @return
-     */
-    public ValidUtil ifAIsBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
-        // assert
-        if(!this.valid){
-            return this;
-        }
-        // main
-        if(JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
-                && !JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
-            populateError("%s is %s, but %s is not %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
-        }
-        return this;
-    }
-
-    /**
-     * 如果A的值不为B，那么C的值必须为D
-     * @param fieldNameA
-     * @param expectValueB
-     * @param fieldNameC
-     * @param expectValueD
-     * @return
-     */
-    public ValidUtil ifAIsNotBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
-        // assert
-        if(!this.valid){
-            return this;
-        }
-        // main
-        if(!JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
-                && !JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
-            populateError("%s is not %s, but %s is not %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
-        }
-        return this;
-    }
-
-    /**
-     * 如果A的值为B，那么C的值必须不能为D
-     * @param fieldNameA
-     * @param expectValueB
-     * @param fieldNameC
-     * @param expectValueD
-     * @return
-     */
-    public ValidUtil ifAIsBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
-        // assert
-        if(!this.valid){
-            return this;
-        }
-        // main
-        if(JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
-                && JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
-            populateError("%s is %s, but %s is %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
-        }
-        return this;
-    }
-
-    /**
-     * 如果A的值为B，那么C的值必须不能为D
-     * @param fieldNameA
-     * @param expectValueB
-     * @param fieldNameC
-     * @param expectValueD
-     * @return
-     */
-    public ValidUtil ifAIsNotBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
-        // assert
-        if(!this.valid){
-            return this;
-        }
-        // main
-        if(!JSON.toJSONString(getMapValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))
-                && JSON.toJSONString(getMapValue(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
-            populateError("%s is not %s, but %s is %s", fieldNameA, JSON.toJSONString(expectValueB), fieldNameC, JSON.toJSONString(expectValueD));
-        }
-        return this;
-    }
 
     // 工具集
 
@@ -492,9 +497,9 @@ public class ValidUtil implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if(this.valid){
-            method.invoke(this, args);
+            return method.invoke(this, args);
         }
-        return this;
+        return null;
     }
 }
 
