@@ -327,24 +327,4 @@ public class ValidUtil extends InitValid {
         }
         return this;
     }
-
-    /**
-     * 测试Main
-     * @param args
-     */
-    public static void main(String[] args) {
-        Kobe kobe = new Kobe();
-        kobe.setRun("mamba");
-        Goal goal = new Goal();
-        goal.setType(2);
-        goal.setStep(2);
-        kobe.setGoal(goal);
-        ValidUtil validUtil = new ValidUtil("k", () -> kobe)
-                .notNull("run", "goal")
-                .sub("goal")
-                .notNull("type","step")
-                .supSub("goal")
-                .ifAIsBThenCMustD("type", 2, "step", 3);
-        System.out.println(JSON.toJSONString(validUtil));
-    }
 }
