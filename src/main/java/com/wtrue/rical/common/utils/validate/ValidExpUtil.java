@@ -24,7 +24,7 @@ public class ValidExpUtil extends BaseValid{
             }
             Boolean success = exp.get();
             if(success == null || !success) {
-                throwError("expression %s is not legal", expName);
+                throwError("expression '%s' is not legal", expName);
             }
         }catch (VException e){
             // do nothing...
