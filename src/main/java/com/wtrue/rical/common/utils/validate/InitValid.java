@@ -8,7 +8,7 @@ import java.util.Stack;
  * @author: meidanlong
  * @date: 2022/1/20 6:59 PM
  */
-public class InitValid extends BaseValid{
+class InitValid extends BaseValid{
     
     protected Stack<CurObj> stack = new Stack<>();
 
@@ -17,7 +17,7 @@ public class InitValid extends BaseValid{
         stack.push(curObj);
     }
 
-    public CurObj peek() throws VException{
+    protected CurObj peek() throws VException{
         if(!isValid()){
             throw new VException(getMessage());
         }
@@ -29,7 +29,7 @@ public class InitValid extends BaseValid{
         }
     }
 
-    public CurObj pop() throws VException{
+    protected CurObj pop() throws VException{
         if(!isValid()){
             throw new VException(getMessage());
         }
@@ -41,14 +41,14 @@ public class InitValid extends BaseValid{
         }
     }
 
-    public void push(CurObj CurObj) throws VException{
+    protected void push(CurObj CurObj) throws VException{
         if(!isValid()){
             throw new VException(getMessage());
         }
         stack.push(CurObj);
     }
 
-    public Object peekObj() throws VException{
+    protected Object peekObj() throws VException{
         if(!isValid()){
             throw new VException(getMessage());
         }
@@ -60,7 +60,7 @@ public class InitValid extends BaseValid{
         }
     }
 
-    public String peekObjName() throws VException{
+    protected String peekObjName() throws VException{
         if(!isValid()){
             throw new VException(getMessage());
         }
@@ -72,7 +72,7 @@ public class InitValid extends BaseValid{
         }
     }
 
-    public void setTopData(String k, Object v) throws VException{
+    protected void setTopData(String k, Object v) throws VException{
         if(!isValid()){
             throw new VException(getMessage());
         }

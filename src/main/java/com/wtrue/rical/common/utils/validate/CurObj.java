@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: meidanlong
  * @date: 2022/1/20 8:19 PM
  */
-public class CurObj {
+class CurObj {
     // 当前对象名称
     private String curObjName;
     // 当前对象

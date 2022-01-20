@@ -9,7 +9,7 @@ package com.wtrue.rical.common.utils.validate;
 import com.wtrue.rical.common.domain.BaseException;
 import com.wtrue.rical.common.enums.ErrorEnum;
 
-public class VException extends BaseException {
+class VException extends BaseException {
     public VException(String message) {
         super(ErrorEnum.PARAM_ERROR.getCode(), message);
     }
