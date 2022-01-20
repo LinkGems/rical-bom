@@ -1,17 +1,14 @@
-package com.wtrue.rical.common.utils.validate.domain;
-
-import com.wtrue.rical.common.domain.BaseObject;
+package com.wtrue.rical.common.utils.validate;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @description: 辅助校验对象
+ * @description:校验当前对象的基本信息
  * @author: meidanlong
- * @date: 2022/1/19 9:07 PM
+ * @date: 2022/1/20 8:19 PM
  */
-public class BaseValidObj extends BaseObject {
-
+public class CurObj {
     // 当前对象名称
     private String curObjName;
     // 当前对象
@@ -19,7 +16,7 @@ public class BaseValidObj extends BaseObject {
     // 当前对象属性值
     private Map<String, Object> fieldsData = new ConcurrentHashMap<>();
 
-    public BaseValidObj(String curObjName, Object curObj) {
+    public CurObj(String curObjName, Object curObj) {
         this.curObjName = curObjName;
         this.curObj = curObj;
     }
