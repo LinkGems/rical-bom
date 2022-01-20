@@ -173,6 +173,7 @@ public class ValidUtil extends InitValid {
     }
 
     /**
+     * ifAIsBThenCMustD
      * 如果A的值为B，那么C的值必须为D
      * @param fieldNameA
      * @param expectValueB
@@ -180,7 +181,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifAIsBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidUtil ifThenMust(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && !JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
@@ -193,6 +194,7 @@ public class ValidUtil extends InitValid {
     }
 
     /**
+     * ifAIsNotBThenCMustD
      * 如果A的值不为B，那么C的值必须为D
      * @param fieldNameA
      * @param expectValueB
@@ -200,7 +202,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifAIsNotBThenCMustD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidUtil ifNotThenMust(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(!JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && !JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
@@ -213,6 +215,7 @@ public class ValidUtil extends InitValid {
     }
 
     /**
+     * ifAIsBThenCMustNotD
      * 如果A的值为B，那么C的值必须不能为D
      * @param fieldNameA
      * @param expectValueB
@@ -220,7 +223,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifAIsBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidUtil ifThenMustNot(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
@@ -233,6 +236,7 @@ public class ValidUtil extends InitValid {
     }
 
     /**
+     * ifAIsNotBThenCMustNotD
      * 如果A的值为B，那么C的值必须不能为D
      * @param fieldNameA
      * @param expectValueB
@@ -240,7 +244,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifAIsNotBThenCMustNotD(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidUtil ifNotThenMustNot(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(!JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
