@@ -2,8 +2,6 @@ package com.wtrue.rical.common.utils.validate;
 
 import com.alibaba.fastjson.JSON;
 import com.wtrue.rical.common.utils.StringUtil;
-import com.wtrue.rical.common.utils.test.Goal;
-import com.wtrue.rical.common.utils.test.Kobe;
 
 import java.lang.reflect.Field;
 import java.util.List;
