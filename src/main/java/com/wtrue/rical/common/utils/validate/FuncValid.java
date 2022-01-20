@@ -2,14 +2,23 @@ package com.wtrue.rical.common.utils.validate;
 
 import com.alibaba.fastjson.JSON;
 import com.wtrue.rical.common.domain.BaseError;
+import com.wtrue.rical.common.enums.ErrorEnum;
+import com.wtrue.rical.common.utils.ValidCgLibUtil;
+import com.wtrue.rical.common.utils.test.Goal;
+import com.wtrue.rical.common.utils.test.Kobe;
 import com.wtrue.rical.common.utils.validate.domain.BaseValidObj;
 import com.wtrue.rical.common.utils.StringUtil;
 import com.wtrue.rical.common.utils.validate.exception.ValidException;
 import com.wtrue.rical.common.utils.validate.thread.ValidThreadLocal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.cglib.proxy.MethodProxy;
 
 import javax.xml.bind.ValidationException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -20,7 +29,49 @@ import java.util.function.Supplier;
  */
 
 @Slf4j
-public class FuncValid {
+public class FuncValid implements MethodInterceptor {
+    private FuncValid funcValid;
+    @Override
+    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy){
+        if(ValidThreadLocal.isValid()){
+            try{
+                return method.invoke(funcValid, objects);
+            }catch (ValidException | IllegalAccessException | InvocationTargetException e){
+//                isValid = false;
+//                error.setCode(ErrorEnum.PARAM_ERROR.getCode());
+//                error.setMessage(e.getMessage());
+            }
+
+        }
+        return null;
+    }
+
+    public FuncValid getProxy(String objName, Supplier getObj){
+        funcValid = new FuncValid(objName, getObj);
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(FuncValid.class);
+        enhancer.setCallback(this);
+        return  (FuncValid)enhancer.create(new Class[]{String.class, Supplier.class}, new Object[]{objName, getObj});
+    }
+
+
+    public static void main(String[] args) {
+        Kobe kobe = new Kobe();
+        kobe.setRun("mamba");
+        Goal goal = new Goal();
+        goal.setType(2);
+        goal.setStep(2);
+        kobe.setGoal(goal);
+        ValidCgLibUtil validJdkUtil = new ValidCgLibUtil();
+        FuncValid k = validJdkUtil
+                .getProxy("k", () -> kobe)
+                .notNull("")
+                .notNull("goal")
+                .sub("goal")
+                .ifAIsBThenCMustD("type", 2, "step", 3);
+        System.out.println(k.isValid());;
+        System.out.println(JSON.toJSONString(k.getError()));;
+    }
 
     /**
      * 有参构造函数，传入对象用于初始化
@@ -132,20 +183,21 @@ public class FuncValid {
             Field field = curObj.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             fieldValue = field.get(curObj);
+            // assert
+            if(fieldValue == null){
+                ValidThreadLocal.setError("'%s#%s' should not be null", ValidThreadLocal.peekObjName(), fieldName);
+            }else if(fieldValue instanceof String && StringUtil.isEmpty((String) fieldValue)){
+                ValidThreadLocal.setError("'%s#%s' should not be empty", ValidThreadLocal.peekObjName(), fieldName);
+            }else if(fieldValue instanceof List && ((List<?>) fieldValue).size() <= 0){
+                ValidThreadLocal.setError("'%s#%s' should not be empty", ValidThreadLocal.peekObjName(), fieldName);
+            }else{
+                ValidThreadLocal.setTopData(fieldName, fieldValue);
+            }
         } catch (NoSuchFieldException e) {
-            throw new ValidException("there is not a filed named '%s#%s'", ValidThreadLocal.peekObjName(), fieldName);
-//            ValidThreadLocal.setError("there is not a filed named '%s#%s'", ValidThreadLocal.peekObjName(), fieldName);
+//            throw new ValidException("there is not a filed named '%s#%s'", ValidThreadLocal.peekObjName(), fieldName);
+            ValidThreadLocal.setError("there is not a filed named '%s#%s'", ValidThreadLocal.peekObjName(), fieldName);
         } catch (IllegalAccessException e) {
             ValidThreadLocal.setError("'%s#%s' access illegal", ValidThreadLocal.peekObjName(), fieldName);
-        }
-        if(fieldValue == null){
-            ValidThreadLocal.setError("'%s#%s' should not be null", ValidThreadLocal.peekObjName(), fieldName);
-        }else if(fieldValue instanceof String && StringUtil.isEmpty((String) fieldValue)){
-            ValidThreadLocal.setError("'%s#%s' should not be empty", ValidThreadLocal.peekObjName(), fieldName);
-        }else if(fieldValue instanceof List && ((List<?>) fieldValue).size() <= 0){
-            ValidThreadLocal.setError("'%s#%s' should not be empty", ValidThreadLocal.peekObjName(), fieldName);
-        }else{
-            ValidThreadLocal.setTopData(fieldName, fieldValue);
         }
         return this;
     }
