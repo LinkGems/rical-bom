@@ -8,18 +8,18 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * @description:校验类
+ * @description:对象校验工具类
  * @author: meidanlong
  * @date: 2022/1/20 7:10 PM
  */
-public class ValidUtil extends InitValid {
+public class ValidObjUtil extends InitValid {
 
     /**
      * 有参构造函数，传入对象用于初始化
      * @param objName
      * @param getObj 传入对象或者获取对象过程
      */
-    public ValidUtil(String objName, Supplier getObj){
+    public ValidObjUtil(String objName, Supplier getObj){
         try {
             if(StringUtil.isEmpty(objName)){
                 throwError("baseObjName is empty");
@@ -44,7 +44,7 @@ public class ValidUtil extends InitValid {
      * @param fieldName
      * @return
      */
-    public ValidUtil sub(String fieldName){
+    public ValidObjUtil sub(String fieldName){
         try{
             CurObj subObj = new CurObj(fieldName, getTopData(fieldName));
             push(subObj);
@@ -58,7 +58,7 @@ public class ValidUtil extends InitValid {
      * 获取父对象
      * @return
      */
-    public ValidUtil sup(){
+    public ValidObjUtil sup(){
         try{
             pop();
         } catch (VException e){
@@ -71,7 +71,7 @@ public class ValidUtil extends InitValid {
      * 获取同级对象
      * @return
      */
-    public ValidUtil supSub(String fieldName){
+    public ValidObjUtil supSub(String fieldName){
         try{
             sup();
             sub(fieldName);
@@ -86,7 +86,7 @@ public class ValidUtil extends InitValid {
      * @param fieldName
      * @return
      */
-    public ValidUtil notNull(String fieldName){
+    public ValidObjUtil notNull(String fieldName){
         try{
             Object fieldValue = getTopData(fieldName);
             if(fieldValue != null){
@@ -117,7 +117,7 @@ public class ValidUtil extends InitValid {
      * @param fieldNames
      * @return
      */
-    public ValidUtil notNull(String... fieldNames){
+    public ValidObjUtil notNull(String... fieldNames){
         for(String fieldName : fieldNames){
             notNull(fieldName);
         }
@@ -181,7 +181,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifThenMust(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidObjUtil ifThenMust(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && !JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
@@ -202,7 +202,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifNotThenMust(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidObjUtil ifNotThenMust(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(!JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && !JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
@@ -223,7 +223,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifThenMustNot(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidObjUtil ifThenMustNot(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
@@ -244,7 +244,7 @@ public class ValidUtil extends InitValid {
      * @param expectValueD
      * @return
      */
-    public ValidUtil ifNotThenMustNot(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
+    public ValidObjUtil ifNotThenMustNot(String fieldNameA, Object expectValueB, String fieldNameC, Object expectValueD){
         try{
             if(!JSON.toJSONString(getTopData(fieldNameA)).equals(JSON.toJSONString(expectValueB))
                     && JSON.toJSONString(getTopData(fieldNameC)).equals(JSON.toJSONString(expectValueD))){
@@ -262,7 +262,7 @@ public class ValidUtil extends InitValid {
      * @param max
      * @return
      */
-    public ValidUtil max(String fieldName, long max){
+    public ValidObjUtil max(String fieldName, long max){
         try {
             Long toValidate = Long.valueOf(getTopData(fieldName).toString());
             if(toValidate > max){
@@ -282,7 +282,7 @@ public class ValidUtil extends InitValid {
      * @param min
      * @return
      */
-    public ValidUtil min(String fieldName, long min){
+    public ValidObjUtil min(String fieldName, long min){
         try {
             Long toValidate = Long.valueOf(getTopData(fieldName).toString());
             if(toValidate < min){
@@ -303,7 +303,7 @@ public class ValidUtil extends InitValid {
      * @param max
      * @return
      */
-    public ValidUtil betweenLong(String fieldName, long min, long max){
+    public ValidObjUtil betweenLong(String fieldName, long min, long max){
         min(fieldName, min);
         max(fieldName, max);
         return this;
@@ -315,7 +315,7 @@ public class ValidUtil extends InitValid {
      * @param max
      * @return
      */
-    public ValidUtil listMaxSize(String fieldName, long max){
+    public ValidObjUtil listMaxSize(String fieldName, long max){
         // assert
         try{
             List list = (List) getTopData(fieldName);
