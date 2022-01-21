@@ -22,4 +22,8 @@ public class ThreadLocalUtil {
         return tl.get().getAppKey();
     }
 
+    public static void removeTl(){
+        tl.remove();
+    }
+
 }
