@@ -9,7 +9,7 @@ import com.wtrue.rical.common.enums.ErrorEnum;
  * @author: meidanlong
  * @date: 2022/1/20 6:50 PM
  */
-class BaseValid extends BaseObject {
+public class BaseValid extends BaseObject {
 
     private boolean valid = true;
     private BaseError error = new BaseError();
