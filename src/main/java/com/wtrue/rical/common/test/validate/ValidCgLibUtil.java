@@ -1,6 +1,5 @@
-package com.wtrue.rical.common.utils.validate;
+package com.wtrue.rical.common.test.validate;
 
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
@@ -15,7 +14,7 @@ import java.util.function.Supplier;
  * @author: meidanlong
  * @date: 2022/1/21 5:47 PM
  */
-public class ValidUtil implements MethodInterceptor {
+public class ValidCgLibUtil implements MethodInterceptor {
 
     protected List<ValidObjUtil> validObjUtils;
     private ValidExpUtil validExpUtil;
@@ -43,7 +42,7 @@ public class ValidUtil implements MethodInterceptor {
         }
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(ValidObjUtil.class);
-        enhancer.setCallback(new ValidUtil());
+        enhancer.setCallback(new ValidCgLibUtil());
         return (ValidObjUtil)enhancer.create(new Class[]{String.class, Supplier.class}, new Object[]{objName, getObj});
     }
 
@@ -56,7 +55,7 @@ public class ValidUtil implements MethodInterceptor {
     }
 
     public static void main(String[] args) {
-        new ValidUtil().expProxy()
+        new ValidCgLibUtil().expProxy()
                 .expression("1", ()->1==1)
                 .expression("2", ()->1!=1)
                 .expression("3", ()->1==1);
@@ -73,6 +72,7 @@ public class ValidUtil implements MethodInterceptor {
 //                .notNull("run","goal");
     }
 }
+
 class kobe{
     private String run;
     private String goal;
