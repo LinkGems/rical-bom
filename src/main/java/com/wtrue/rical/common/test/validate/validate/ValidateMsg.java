@@ -1,14 +1,16 @@
-package com.wtrue.rical.common.test.validate.validate.interceptor;
+package com.wtrue.rical.common.test.validate.validate;
 
 import com.wtrue.rical.common.domain.BaseError;
 import com.wtrue.rical.common.enums.ErrorEnum;
+
+import javax.xml.bind.ValidationException;
 
 /**
  * @description:
  * @author: meidanlong
  * @date: 2022/1/23 6:06 PM
  */
-public class ValidateMsg {
+class ValidateMsg {
 
     private Boolean valid = true;
 

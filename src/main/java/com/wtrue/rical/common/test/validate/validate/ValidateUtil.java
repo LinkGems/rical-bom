@@ -1,9 +1,5 @@
 package com.wtrue.rical.common.test.validate.validate;
 
-import com.wtrue.rical.common.test.validate.validate.exception.ValidateException;
-import com.wtrue.rical.common.test.validate.validate.impl.ObjectValidateImpl;
-import com.wtrue.rical.common.test.validate.validate.interceptor.ValidateStruct;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,29 +18,34 @@ import java.util.function.Supplier;
  */
 public class ValidateUtil extends ValidateStruct implements InvocationHandler {
 
-    private final String[] invokeThis = {"sub", "sup", "supSub", "valid"};
+    private final String[] invokeThis = {"sub", "sup", "supSub"};
 
-    private IObjectValidate objectValidate;
+    protected IObjectValidate objectValidate;
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args){
-        if(isValid()){
-            try{
+        String methodName = method.getName();
+        if("valid".equals(methodName)){
+            return valid();
+        }
+        try{
+            if(isValid()){
                 if(Arrays.asList(invokeThis).contains(method.getName())){
-                    method.invoke(this, args);
-                    return objectValidate;
+                    Method thisMethod = ValidateUtil.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                    thisMethod.setAccessible(true);
+                    return thisMethod.invoke(this, args);
                 }
                 List<ObjectValidateImpl> list = peekValidateObjectList();
                 for(ObjectValidateImpl obj : list){
                     method.invoke(obj, args);
                 }
-            } catch (InvocationTargetException e) {
-                populateError(e.getMessage());
-            } catch (IllegalAccessException e) {
-                populateError(e.getMessage());
-            } catch (ValidateException e){
-                populateError(e.getMessage());
             }
+        } catch (ValidateException | NoSuchMethodException e) {
+            populateError(e.getMessage());
+        } catch (InvocationTargetException e) {
+            populateError(e.getTargetException().getMessage());
+        } catch (IllegalAccessException e) {
+            populateError(e.getMessage());
         }
         return objectValidate;
     }
@@ -58,6 +59,10 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
                         ObjectValidateImpl.class.getInterfaces(),
                         this);
         return objectValidate;
+    }
+
+    private ValidateUtil valid(){
+        return this;
     }
 
     private List<ObjectValidateImpl> getObjListOfField(String name, Object obj){
@@ -85,12 +90,14 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
 
     private IObjectValidate sup(){
         popValidateObjectList();
+        if(stackIsEmpty()){
+            populateError("there is no super object, please check call stack");
+        }
         return objectValidate;
     }
 
     private IObjectValidate supSub(String fieldName){
-        sup();
-        sub(fieldName);
+        sup().sub(fieldName);
         return objectValidate;
     }
 
@@ -104,9 +111,5 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
             subList.addAll(addList);
         }
         return subList;
-    }
-
-    private ValidateUtil valid(){
-        return this;
     }
 }

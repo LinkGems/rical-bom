@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.test.validate.validate.pojo;
+package com.wtrue.rical.common.test.validate.validate;
 
 import com.wtrue.rical.common.domain.BaseObject;
 
@@ -10,17 +10,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: meidanlong
  * @date: 2022/1/23 5:37 PM
  */
-public class ValidateObject extends BaseObject {
+class ValidateObject extends BaseObject {
 
     private String objName;
 
-    private Object object;
+    private Object curObj;
 
     private Map<String, Object> fieldMap = new ConcurrentHashMap<>();
 
-    public ValidateObject(String objName, Object object) {
+    public ValidateObject(String objName, Object curObj) {
         this.objName = objName;
-        this.object = object;
+        this.curObj = curObj;
     }
 
     public String getObjName() {
@@ -31,12 +31,12 @@ public class ValidateObject extends BaseObject {
         this.objName = objName;
     }
 
-    public Object getObject() {
-        return object;
+    public Object getCurObj() {
+        return curObj;
     }
 
-    public void setObject(Object object) {
-        this.object = object;
+    public void setCurObj(Object curObj) {
+        this.curObj = curObj;
     }
 
     public Map<String, Object> getFieldMap() {

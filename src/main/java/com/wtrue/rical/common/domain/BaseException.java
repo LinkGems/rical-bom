@@ -34,4 +34,8 @@ public class BaseException extends RuntimeException{
         this.message = baseError.getMessage();
     }
 
+    public String getMessage(){
+        return message;
+    }
+
 }

@@ -1,8 +1,4 @@
-package com.wtrue.rical.common.test.validate.validate.interceptor;
-
-import com.wtrue.rical.common.test.validate.IValidate;
-import com.wtrue.rical.common.test.validate.validate.impl.ObjectValidateImpl;
-import com.wtrue.rical.common.test.validate.validate.pojo.ValidateObject;
+package com.wtrue.rical.common.test.validate.validate;
 
 import java.util.List;
 import java.util.Stack;
@@ -12,10 +8,13 @@ import java.util.Stack;
  * @author: meidanlong
  * @date: 2022/1/23 5:36 PM
  */
-public class ValidateStruct extends ValidateMsg {
+class ValidateStruct extends ValidateMsg {
 
     private Stack<List<ObjectValidateImpl>> stack = new Stack<>();
 
+    public Boolean stackIsEmpty(){
+        return stack.isEmpty();
+    }
 
     public List<ObjectValidateImpl> peekValidateObjectList(){
         return stack.peek();
