@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.test.validate.validate;
+package com.wtrue.rical.common.utils.validate;
 
 import com.wtrue.rical.common.domain.BaseObject;
 

@@ -1,9 +1,7 @@
-package com.wtrue.rical.common.test.validate.validate;
+package com.wtrue.rical.common.utils.validate;
 
 import com.wtrue.rical.common.domain.BaseError;
 import com.wtrue.rical.common.enums.ErrorEnum;
-
-import javax.xml.bind.ValidationException;
 
 /**
  * @description:

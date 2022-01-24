@@ -1,7 +1,7 @@
-package com.wtrue.rical.common.test.validate.validate.test;
+package com.wtrue.rical.common.utils.validate.test;
 
 import com.alibaba.fastjson.JSON;
-import com.wtrue.rical.common.test.validate.validate.ValidateUtil;
+import com.wtrue.rical.common.utils.validate.ValidateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
