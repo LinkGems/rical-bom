@@ -16,11 +16,11 @@ class ValidateMsg {
 
     private BaseError error;
 
-    protected void populateError(String errorMsg){
+    protected void populateError(String errorMsg, String... params){
         this.valid = false;
         error = new BaseError();
         error.setCode(ErrorEnum.PARAM_ERROR.getCode());
-        error.setMessage(errorMsg);
+        error.setMessage(String.format(errorMsg, params));
     }
 
     public Boolean isValid() {

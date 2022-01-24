@@ -35,14 +35,16 @@ class TestClass {
         person.setWorks(works);
 
         ValidateUtil valid = new ValidateUtil()
-                .obj("my", () -> person)
-                .notNull("name")
-                .notNull("hobby")
-                .supSub("works")
-                .notNull("name")
-                .notNull("workType")
-                .notNull("salary")
+                .object("1", () -> person)
+                .notNull("name","sex","hobby")
+                .listMaxSize("works", 4)
+                .listMinSize("works", 1)
+                .sub("works")
+                .notNull("name","workType")
+                .ifNotThenMustNotNull("workType", 3, "salary")
                 .valid();
+
+//        ValidateUtil valid = new ValidateUtil().expression().check("1==1", null).valid();
         System.out.println(JSON.toJSONString(valid));
     }
 }

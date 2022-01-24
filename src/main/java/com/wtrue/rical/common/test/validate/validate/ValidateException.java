@@ -12,4 +12,7 @@ class ValidateException extends BaseException {
     public ValidateException(String message) {
         super(ErrorEnum.PARAM_ERROR.getCode(), message);
     }
+    public ValidateException(String message, String... params) {
+        super(ErrorEnum.PARAM_ERROR.getCode(), String.format(message, params));
+    }
 }
