@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.utils.validate.test;
+package com.wtrue.rical.common.test;
 
 import com.alibaba.fastjson.JSON;
 import com.wtrue.rical.common.utils.validate.ValidateUtil;
@@ -35,7 +35,7 @@ class TestClass {
         person.setWorks(works);
 
         ValidateUtil valid = new ValidateUtil()
-                .object("1", () -> person)
+                .object("person obj", () -> person)
                 .notNull("name","sex","hobby")
                 .listMaxSize("works", 4)
                 .listMinSize("works", 1)

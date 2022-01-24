@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.utils.validate.test;
+package com.wtrue.rical.common.test;
 
 import lombok.Data;
 
