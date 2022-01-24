@@ -41,6 +41,13 @@ class TestClass {
                 .listMinSize("works", 1)
                 .sub("works")
                 .notNull("name","workType")
+                .expression("workType is not atHome, salary must not be null", (w)->{
+                    Work w1 = (Work) w;
+                    if(w1.getWorkType() != 3){
+                        return w1.getSalary() != null;
+                    }
+                    return true;
+                })
                 .ifNotThenMustNotNull("workType", 3, "salary")
                 .build();
 

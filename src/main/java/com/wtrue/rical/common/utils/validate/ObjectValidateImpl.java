@@ -6,6 +6,7 @@ import com.wtrue.rical.common.utils.StringUtil;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -189,8 +190,8 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
     }
 
     @Override
-    public IObjectValidate expression(String exprName, Supplier<Boolean> expression) {
-        Boolean success = expression.get();
+    public IObjectValidate expression(String exprName, Function<Object,Boolean> expression) {
+        Boolean success = expression.apply(this.getCurObj());
         if(!success){
             throw new ValidateException("expression '%s' is not legal", exprName);
         }

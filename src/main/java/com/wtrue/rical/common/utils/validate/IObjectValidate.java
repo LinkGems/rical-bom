@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.utils.validate;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -165,5 +166,5 @@ public interface IObjectValidate {
      * @param expression
      * @return
      */
-    IObjectValidate expression(String exprName, Supplier<Boolean> expression);
+    IObjectValidate expression(String exprName, Function<Object,Boolean> expression);
 }
