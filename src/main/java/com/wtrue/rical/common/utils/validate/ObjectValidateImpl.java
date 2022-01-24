@@ -6,6 +6,7 @@ import com.wtrue.rical.common.utils.StringUtil;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @description:
@@ -183,6 +184,15 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
             }
         } catch (ClassCastException e){
             throw new ValidateException("'%s#%s' can not cast to List", super.getObjName(), fieldName);
+        }
+        return this;
+    }
+
+    @Override
+    public IObjectValidate expression(String exprName, Supplier<Boolean> expression) {
+        Boolean success = expression.get();
+        if(!success){
+            throw new ValidateException("expression '%s' is not legal", exprName);
         }
         return this;
     }

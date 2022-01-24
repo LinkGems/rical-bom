@@ -1,5 +1,7 @@
 package com.wtrue.rical.common.utils.validate;
 
+import java.util.function.Supplier;
+
 /**
  * @description:
  * @author: meidanlong
@@ -156,4 +158,12 @@ public interface IObjectValidate {
      * @return
      */
     IObjectValidate listMinSize(String fieldName, long min);
+
+    /**
+     * 开放表达式校验
+     * @param exprName
+     * @param expression
+     * @return
+     */
+    IObjectValidate expression(String exprName, Supplier<Boolean> expression);
 }
