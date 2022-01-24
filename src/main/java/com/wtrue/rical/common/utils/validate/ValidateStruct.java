@@ -12,23 +12,23 @@ class ValidateStruct extends ValidateMsg {
 
     private Stack<List<ObjectValidateImpl>> stack = new Stack<>();
 
-    public Boolean stackIsEmpty(){
+    protected Boolean stackIsEmpty(){
         return stack.isEmpty();
     }
 
-    public List<ObjectValidateImpl> peekValidateObjectList(){
+    protected List<ObjectValidateImpl> peekValidateObjectList(){
         return stack.peek();
     }
 
-    public List<ObjectValidateImpl> popValidateObjectList(){
+    protected List<ObjectValidateImpl> popValidateObjectList(){
         return stack.pop();
     }
 
-    public void pushValidateObjectList(List<ObjectValidateImpl> validateObjectList){
+    protected void pushValidateObjectList(List<ObjectValidateImpl> validateObjectList){
         stack.push(validateObjectList);
     }
 
-    public void addValidateObjectList(List<ObjectValidateImpl> validateObjectList){
+    protected void addValidateObjectList(List<ObjectValidateImpl> validateObjectList){
         List<ObjectValidateImpl> oriValidateObjectList = peekValidateObjectList();
         if(oriValidateObjectList == null){
             pushValidateObjectList(validateObjectList);
