@@ -30,8 +30,8 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args){
         // 返回方法
         String methodName = method.getName();
-        if("valid".equals(methodName)){
-            return valid();
+        if("build".equals(methodName)){
+            return build();
         }
         // 代理逻辑
         try{
@@ -110,7 +110,7 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
      * 构建校验类对象方法
      * @return
      */
-    private ValidateUtil valid(){
+    private ValidateUtil build(){
         return this;
     }
 

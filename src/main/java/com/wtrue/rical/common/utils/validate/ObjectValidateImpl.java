@@ -34,7 +34,7 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
     }
 
     @Override
-    public ValidateUtil valid() {
+    public ValidateUtil build() {
         return new ValidateUtil();
     }
 

@@ -13,7 +13,7 @@ public interface IExpressionValidate {
      * 对象构建方法，需保留
      * @return
      */
-    ValidateUtil valid();
+    ValidateUtil build();
     /**
      * 检验表达式是否合法
      * @param exprName

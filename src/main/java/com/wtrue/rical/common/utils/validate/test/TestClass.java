@@ -42,9 +42,9 @@ class TestClass {
                 .sub("works")
                 .notNull("name","workType")
                 .ifNotThenMustNotNull("workType", 3, "salary")
-                .valid();
+                .build();
 
-//        ValidateUtil valid = new ValidateUtil().expression().check("1==1", null).valid();
+//        ValidateUtil valid = new ValidateUtil().expression().check("1==1", null).build();
         System.out.println(JSON.toJSONString(valid));
     }
 }

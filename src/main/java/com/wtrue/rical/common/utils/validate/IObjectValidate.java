@@ -17,7 +17,7 @@ public interface IObjectValidate {
      * 对象构建方法，需保留
      * @return
      */
-    ValidateUtil valid();
+    ValidateUtil build();
 
     /**
      * 判断对象属性非空

@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 class ExpressionValidateImpl implements IExpressionValidate{
 
     @Override
-    public ValidateUtil valid() {
+    public ValidateUtil build() {
         return new ValidateUtil();
     }
 
