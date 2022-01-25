@@ -16,7 +16,7 @@ class TestClass {
     public static void main(String[] args) {
         Person person = new Person();
         person.setName("mdl");
-        person.setSex(1);
+//        person.setSex(1);
         List<String> hobby = new ArrayList<>();
         hobby.add("lq");
         hobby.add("yy");
@@ -27,7 +27,7 @@ class TestClass {
         work1.setSalary(20000);
         Work work2 = new Work();
         work2.setName("当真");
-        work2.setWorkType(1);
+//        work2.setWorkType(1);
 //        work2.setSalary(0);
         List<Work> works = new ArrayList<>();
         works.add(work1);
@@ -36,22 +36,25 @@ class TestClass {
 
         ValidateUtil valid = new ValidateUtil()
                 .object("person obj", () -> person)
-                .notNull("name","sex","hobby")
+                .notNull("name","hobby")
+                .ifNullDefault("sex", 1)
                 .listMaxSize("works", 4)
                 .listMinSize("works", 1)
                 .sub("works")
-                .notNull("name","workType")
-                .expression("workType is not atHome, salary must not be null", (w)->{
-                    Work w1 = (Work) w;
-                    if(w1.getWorkType() != 3){
-                        return w1.getSalary() != null;
-                    }
-                    return true;
-                })
+//                .notNull("name","workType")
+//                .expression("workType is not atHome, salary must not be null", (w)->{
+//                    Work w1 = (Work) w;
+//                    if(w1.getWorkType() != 3){
+//                        return w1.getSalary() != null;
+//                    }
+//                    return true;
+//                })
+                .ifNullDefault("workType", 1)
                 .ifNotThenMustNotNull("workType", 3, "salary")
                 .build();
 
 //        ValidateUtil valid = new ValidateUtil().expression().check("1==1", null).build();
         System.out.println(JSON.toJSONString(valid));
+        System.out.println(JSON.toJSONString(person));
     }
 }

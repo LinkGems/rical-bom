@@ -120,6 +120,14 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
     }
 
     @Override
+    public IObjectValidate ifNullDefault(String fieldName, Object defaultValue){
+        if(reflectGetValue(fieldName) == null){
+            populateResetMap(fieldName, defaultValue);
+        }
+        return this;
+    }
+
+    @Override
     public IObjectValidate max(String fieldName, long max){
         try {
             Long toValidate = Long.valueOf(reflectGetValue(fieldName).toString());
@@ -191,8 +199,12 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
 
     @Override
     public IObjectValidate expression(String exprName, Function<Object,Boolean> expression) {
-        Boolean success = expression.apply(this.getCurObj());
-        if(!success){
+        try{
+            Boolean success = expression.apply(this.getCurObj());
+            if(!success){
+                throw new ValidateException("expression '%s' is not true", exprName);
+            }
+        }catch (Exception e){
             throw new ValidateException("expression '%s' is not legal", exprName);
         }
         return this;

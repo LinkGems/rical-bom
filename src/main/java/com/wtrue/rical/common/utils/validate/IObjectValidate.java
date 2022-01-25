@@ -120,6 +120,14 @@ public interface IObjectValidate {
     IObjectValidate ifNotThenMustNotNull(String fieldNameA, Object expectValueB, String fieldNameC);
 
     /**
+     * 如果值为空设置默认值
+     * @param fieldName
+     * @param defaultValue
+     * @return
+     */
+    IObjectValidate ifNullDefault(String fieldName, Object defaultValue);
+
+    /**
      * 对象属性最大值校验
      * @param fieldName
      * @param max

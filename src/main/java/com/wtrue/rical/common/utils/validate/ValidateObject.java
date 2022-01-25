@@ -18,6 +18,8 @@ class ValidateObject extends BaseObject {
 
     private Map<String, Object> fieldMap = new ConcurrentHashMap<>();
 
+    private Map<String, Object> resetMap = new ConcurrentHashMap<>();
+
     public ValidateObject(String objName, Object curObj) {
         this.objName = objName;
         this.curObj = curObj;
@@ -53,5 +55,18 @@ class ValidateObject extends BaseObject {
 
     public Object getFieldMapData(String fieldName){
         return fieldMap.get(fieldName);
+    }
+
+    public Map<String, Object> getResetMap() {
+        return resetMap;
+    }
+
+    public void removeResetMap() {
+        this.resetMap = new ConcurrentHashMap<>();
+    }
+
+    public void populateResetMap(String fieldName, Object value){
+        this.fieldMap.put(fieldName, value);
+        this.resetMap.put(fieldName, value);
     }
 }

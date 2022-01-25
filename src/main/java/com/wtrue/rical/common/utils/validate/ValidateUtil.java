@@ -2,6 +2,7 @@ package com.wtrue.rical.common.utils.validate;
 
 import com.wtrue.rical.common.utils.StringUtil;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -23,6 +25,7 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
     private final String[] invokeThis = {"sub", "sup", "supSub"};
 
     private IObjectValidate objectValidate;
+    private Object curObj;
     private IExpressionValidate expressionValidate;
     private ValidateEnum validateType;
 
@@ -47,6 +50,11 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
                     List<ObjectValidateImpl> list = peekValidateObjectList();
                     for(ObjectValidateImpl obj : list){
                         method.invoke(obj, args);
+                        if(!obj.getResetMap().isEmpty()){
+                            reflectSetValue(obj);
+                            // 清空resetMap
+                            obj.removeResetMap();
+                        }
                     }
                 }
                 if(ValidateEnum.EXPRESSION == validateType){
@@ -58,6 +66,8 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
         } catch (InvocationTargetException e) {
             populateError(e.getTargetException().getMessage());
         } catch (IllegalAccessException e) {
+            populateError(e.getMessage());
+        } catch (NoSuchFieldException e) {
             populateError(e.getMessage());
         }
         return ValidateEnum.OBJECT == validateType ? objectValidate : expressionValidate;
@@ -83,7 +93,7 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
             populateError("function getObj is null");
             return objectValidate;
         }
-        Object curObj = getObj.get();
+        curObj = getObj.get();
         if(curObj == null){
             populateError("%s is null", objName);
             return objectValidate;
@@ -191,6 +201,45 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
     private IObjectValidate supSub(String fieldName){
         sup().sub(fieldName);
         return objectValidate;
+    }
+
+    private IObjectValidate reflectSetValue(ObjectValidateImpl objValid) throws NoSuchFieldException, IllegalAccessException {
+        String[] partObjValid = objValid.getObjName().split("#");
+        Object __curObj = curObj;
+        if(partObjValid[0].contains("_")){
+            Integer curObjListIndex = Integer.valueOf(partObjValid[0].split("_")[1]);
+            List curObjList = (List) curObj;
+            __curObj = curObjList.get(curObjListIndex);
+        }
+        if(partObjValid.length > 1){
+            for(int i=1; i<partObjValid.length; i++){
+                __curObj = getSubObj(__curObj, partObjValid[i]);
+            }
+        }
+        Map<String, Object> resetMap = objValid.getResetMap();
+        for(String key : resetMap.keySet()){
+            Field field = __curObj.getClass().getDeclaredField(key);
+            field.setAccessible(true);
+            field.set(__curObj, resetMap.get(key));
+        }
+        return objectValidate;
+    }
+
+    private Object getSubObj(Object obj, String curFieldName) throws NoSuchFieldException, IllegalAccessException {
+        if(curFieldName.contains("_")){
+            String[] partCurFieldName = curFieldName.split("_");
+            String fieldName = partCurFieldName[0];
+            Integer listIndex = Integer.valueOf(partCurFieldName[1]);
+            Field field = obj.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            List subObjList = (List) field.get(obj);
+            Object subObj = subObjList.get(listIndex);
+            return subObj;
+        }else{
+            Field field = obj.getClass().getDeclaredField(curFieldName);
+            field.setAccessible(true);
+            return field.get(obj);
+        }
     }
 
     /**
