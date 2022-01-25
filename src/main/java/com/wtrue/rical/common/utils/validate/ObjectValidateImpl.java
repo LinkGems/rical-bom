@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * @description:
@@ -117,6 +116,11 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
     @Override
     public IObjectValidate ifNotThenMustNotNull(String fieldNameA, Object expectValueB, String fieldNameC) {
         return ifNotThenMustNot(fieldNameA, expectValueB, fieldNameC, null);
+    }
+
+    @Override
+    public IObjectValidate notNullAtSameTime(String fieldNameA, String fieldNameB){
+        return ifNotThenMustNotNull(fieldNameA, null, fieldNameB);
     }
 
     @Override

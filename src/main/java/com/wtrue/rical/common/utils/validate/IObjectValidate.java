@@ -128,6 +128,14 @@ public interface IObjectValidate {
     IObjectValidate ifNullDefault(String fieldName, Object defaultValue);
 
     /**
+     * 两个属性不同时为空
+     * @param fieldNameA
+     * @param fieldNameB
+     * @return
+     */
+    IObjectValidate notNullAtSameTime(String fieldNameA, String fieldNameB);
+
+    /**
      * 对象属性最大值校验
      * @param fieldName
      * @param max
