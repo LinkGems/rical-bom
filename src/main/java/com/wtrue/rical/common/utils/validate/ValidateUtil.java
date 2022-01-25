@@ -203,6 +203,13 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
         return objectValidate;
     }
 
+    /**
+     * 反射为复杂对象设置值
+     * @param objValid
+     * @return
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     private IObjectValidate reflectSetValue(ObjectValidateImpl objValid) throws NoSuchFieldException, IllegalAccessException {
         String[] partObjValid = objValid.getObjName().split("#");
         Object __curObj = curObj;
@@ -225,6 +232,14 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
         return objectValidate;
     }
 
+    /**
+     * 获取子类对象
+     * @param obj
+     * @param curFieldName
+     * @return
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     private Object getSubObj(Object obj, String curFieldName) throws NoSuchFieldException, IllegalAccessException {
         if(curFieldName.contains("_")){
             String[] partCurFieldName = curFieldName.split("_");
