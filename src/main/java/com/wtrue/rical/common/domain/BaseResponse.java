@@ -19,6 +19,10 @@ public class BaseResponse<T> extends BaseObject{
     private BaseError error;
 
     public BaseResponse<T> populateResponse(T data){
+        return populateResponse(data, "sth. wrong");
+    }
+
+    public BaseResponse<T> populateResponse(T data, String errMsg){
         BaseResponse<T> resp = new BaseResponse<T>();
         if(data != null){
             resp.setData(data);
@@ -26,7 +30,7 @@ public class BaseResponse<T> extends BaseObject{
             resp.setSuccess(false);
             BaseError error = new BaseError();
             error.setCode(1);
-            error.setMessage("sth. wrong when queryJobById");
+            error.setMessage(errMsg);
             resp.setError(error);
         }
         return resp;
