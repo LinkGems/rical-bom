@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @description:
@@ -139,7 +141,7 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
                 throw new ValidateException("value of '%s#%s' should less then '%s'", super.getObjName(), fieldName, String.valueOf(max));
             }
         } catch (NumberFormatException e){
-            throw new ValidateException("'%s#%s' can not cast to Long", super.getObjName(), fieldName);
+            throw new ValidateException("'%s#%s' is null or can not cast to Long", super.getObjName(), fieldName);
         }
         return this;
     }
@@ -152,7 +154,7 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
                 throw new ValidateException("value of '%s#%s' should more then '%s'", super.getObjName(), fieldName, String.valueOf(min));
             }
         } catch (NumberFormatException e){
-            throw new ValidateException("'%s#%s' can not cast to Long", super.getObjName(), fieldName);
+            throw new ValidateException("'%s#%s' is null or can not cast to Long", super.getObjName(), fieldName);
         }
         return this;
     }
@@ -164,7 +166,7 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
      * @param max
      * @return
      */
-    public IObjectValidate betweenLong(String fieldName, long min, long max){
+    public IObjectValidate between(String fieldName, long min, long max){
         min(fieldName, min);
         max(fieldName, max);
         return this;
@@ -183,7 +185,7 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
                 throw new ValidateException("size of '%s#%s' should less then '%s'", super.getObjName(), fieldName, String.valueOf(max));
             }
         } catch (ClassCastException e){
-            throw new ValidateException("'%s#%s' can not cast to List", super.getObjName(), fieldName);
+            throw new ValidateException("'%s#%s' is null or can not cast to List", super.getObjName(), fieldName);
         }
         return this;
     }
@@ -196,7 +198,23 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
                 throw new ValidateException("size of '%s#%s' should more then '%s'", super.getObjName(), fieldName, String.valueOf(min));
             }
         } catch (ClassCastException e){
-            throw new ValidateException("'%s#%s' can not cast to List", super.getObjName(), fieldName);
+            throw new ValidateException("'%s#%s' is null or can not cast to List", super.getObjName(), fieldName);
+        }
+        return this;
+    }
+
+    @Override
+    public IObjectValidate phoneNum(String fieldName){
+        try{
+            String phone = (String) reflectGetValue(fieldName);
+            String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(phone);
+            if(!m.matches()){
+                throw new ValidateException("'%s#%s' is not a phone number", super.getObjName(), fieldName);
+            }
+        } catch (ClassCastException e){
+            throw new ValidateException("'%s#%s' is null or can not cast to String", super.getObjName(), fieldName);
         }
         return this;
     }

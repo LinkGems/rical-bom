@@ -158,7 +158,7 @@ public interface IObjectValidate {
      * @param max
      * @return
      */
-    IObjectValidate betweenLong(String fieldName, long min, long max);
+    IObjectValidate between(String fieldName, long min, long max);
 
     /**
      * 集合最大数量
@@ -175,6 +175,13 @@ public interface IObjectValidate {
      * @return
      */
     IObjectValidate listMinSize(String fieldName, long min);
+
+    /**
+     * 校验是否为手机号
+     * @param fieldName
+     * @return
+     */
+    IObjectValidate phoneNum(String fieldName);
 
     /**
      * 开放表达式校验
