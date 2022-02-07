@@ -25,6 +25,10 @@ class ValidateMsg {
         return valid;
     }
 
+    public Boolean isNotValid() {
+        return !valid;
+    }
+
     public BaseError getError() {
         return error;
     }
