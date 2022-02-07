@@ -58,7 +58,7 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
                     }
                 }
                 if(ValidateEnum.EXPRESSION == validateType){
-                    method.invoke(proxy, args);
+                    method.invoke(new ExpressionValidateImpl(), args);
                 }
             }
         } catch (ValidateException | NoSuchMethodException e) {
