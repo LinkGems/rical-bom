@@ -136,6 +136,24 @@ public interface IObjectValidate {
     IObjectValidate notNullAtSameTime(String fieldNameA, String fieldNameB);
 
     /**
+     * 如果A的值为B，则进入filedC
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @return
+     */
+    IObjectValidate ifThenSub(String fieldNameA, Object expectValueB, String fieldNameC);
+
+    /**
+     * 如果A的值不为B，则进入filedC
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @return
+     */
+    IObjectValidate ifNotThenSub(String fieldNameA, Object expectValueB, String fieldNameC);
+
+    /**
      * 对象属性最大值校验
      * @param fieldName
      * @param max

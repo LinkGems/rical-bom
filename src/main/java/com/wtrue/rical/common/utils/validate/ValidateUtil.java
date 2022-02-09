@@ -28,6 +28,7 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
     private Object curObj;
     private IExpressionValidate expressionValidate;
     private ValidateEnum validateType;
+    private int skipMethodState = 0;
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args){
@@ -39,24 +40,42 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
         // 代理逻辑
         try{
             if(isValid()){
-                // assert args
+                // 校验方法参数
                 validateArgs(methodName, args);
+                // 对象校验
                 if(ValidateEnum.OBJECT == validateType){
+                    // 层级变更
                     if(Arrays.asList(invokeThis).contains(method.getName())){
                         Method thisMethod = ValidateUtil.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
                         thisMethod.setAccessible(true);
                         return thisMethod.invoke(this, args);
                     }
-                    List<ObjectValidateImpl> list = peekValidateObjectList();
-                    for(ObjectValidateImpl obj : list){
-                        method.invoke(obj, args);
-                        if(!obj.getResetMap().isEmpty()){
-                            reflectSetValue(obj);
-                            // 清空resetMap
-                            obj.removeResetMap();
+                    if(skipMethodState == 0){
+                        // 该层级对象方法调用
+                        List<ObjectValidateImpl> list = peekValidateObjectList();
+                        for(ObjectValidateImpl obj : list){
+                            method.invoke(obj, args);
+                            // 可为原对象赋值
+                            if(!obj.getResetMap().isEmpty()){
+                                reflectSetValue(obj);
+                                // 清空resetMap
+                                obj.removeResetMap();
+                            }
+                        }
+                        // 如果方法以"ThenSup"或"ThenSub"结尾，则执行指定栈层级变更
+                        if(methodName.endsWith("ThenSub")){
+                            // 按照约定，最后一个参数为下一层级的fieldName
+                            String subFieldName = (String) args[args.length -1];
+                            sub(subFieldName);
+                        }else if(methodName.endsWith("ThenSupSub")){
+                            String subFieldName = (String) args[args.length -1];
+                            supSub(subFieldName);
+                        }else if(methodName.endsWith("ThenSup")){
+                            sup();
                         }
                     }
                 }
+                // 表达式校验
                 if(ValidateEnum.EXPRESSION == validateType){
                     method.invoke(new ExpressionValidateImpl(), args);
                 }
@@ -64,7 +83,15 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
         } catch (ValidateException | NoSuchMethodException e) {
             populateError(e.getMessage());
         } catch (InvocationTargetException e) {
-            populateError(e.getTargetException().getMessage());
+            // 层级执行方法捞回
+            // 如果方法以"ThenSup"或"ThenSub"结尾，则执行指定栈层级变更
+            if(methodName.endsWith("ThenSub") || methodName.endsWith("ThenSupSub")){
+                skipMethodState++;
+            }else if(methodName.endsWith("ThenSup")){
+                sup();
+            }else{
+                populateError(e.getTargetException().getMessage());
+            }
         } catch (IllegalAccessException e) {
             populateError(e.getMessage());
         } catch (NoSuchFieldException e) {
@@ -130,15 +157,17 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
      * @param args
      */
     private void validateArgs(String methodName, Object[] args) throws ValidateException {
-        for(Object arg : args){
-            if(arg == null){
-                throw new ValidateException("there has null arg, when call method '%s'", methodName);
-            }
-            if(arg instanceof String && StringUtil.isEmpty((String)arg)){
-                throw new ValidateException("there has null arg, when call method '%s'", methodName);
-            }
-            if(arg.getClass().isArray()){
-                validateArgs(methodName, (Object[])arg);
+        if(args != null){
+            for(Object arg : args){
+                if(arg == null){
+                    throw new ValidateException("there has null arg, when call method '%s'", methodName);
+                }
+                if(arg instanceof String && StringUtil.isEmpty((String)arg)){
+                    throw new ValidateException("there has null arg, when call method '%s'", methodName);
+                }
+                if(arg.getClass().isArray()){
+                    validateArgs(methodName, (Object[])arg);
+                }
             }
         }
     }
@@ -186,9 +215,14 @@ public class ValidateUtil extends ValidateStruct implements InvocationHandler {
      * @return
      */
     private IObjectValidate sup(){
-        popValidateObjectList();
-        if(stackIsEmpty()){
-            populateError("there is no super object, please check call stack");
+        // 更新skipMethodState状态
+        if(skipMethodState > 0){
+            skipMethodState--;
+        }else{
+            popValidateObjectList();
+            if(stackIsEmpty()){
+                populateError("there is no super object, please check call stack");
+            }
         }
         return objectValidate;
     }
