@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.test;
 
+import com.wtrue.rical.common.domain.BaseObject;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @date: 2022/1/24 10:53 AM
  */
 @Data
-class Person {
+class Person extends BaseObject {
 
     String name;
 

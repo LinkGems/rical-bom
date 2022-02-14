@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.test;
 
+import com.wtrue.rical.common.domain.BaseObject;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @date: 2022/1/24 12:26 PM
  */
 @Data
-class Work {
+class Work extends BaseObject {
     String name;
 
     /**

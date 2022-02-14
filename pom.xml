@@ -18,6 +18,8 @@
         <httpcore.version>4.4.10</httpcore.version>
         <httpclient.version>4.5.6</httpclient.version>
         <fastjson.version>1.2.69</fastjson.version>
+        <springfox-swagger2.version>2.5.0</springfox-swagger2.version>
+        <swagger-bootstrap-ui.version>1.6</swagger-bootstrap-ui.version>
     </properties>
 
     <dependencies>
@@ -36,17 +38,17 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>2.5.0</version>
+            <version>${springfox-swagger2.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.5.0</version>
+            <version>${springfox-swagger2.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>1.6</version>
+            <version>${swagger-bootstrap-ui.version}</version>
         </dependency>
 
         <!-- joda时间处理 -->
