@@ -166,7 +166,7 @@ public interface IObjectValidate {
      * @param max
      * @return
      */
-    IObjectValidate listMaxSize(String fieldName, long max);
+    IObjectValidate maxSize(String fieldName, long max);
 
     /**
      * 集合最小数量
@@ -174,7 +174,7 @@ public interface IObjectValidate {
      * @param min
      * @return
      */
-    IObjectValidate listMinSize(String fieldName, long min);
+    IObjectValidate minSize(String fieldName, long min);
 
     /**
      * 校验是否为手机号

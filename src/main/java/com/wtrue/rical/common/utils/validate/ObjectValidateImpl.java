@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.wtrue.rical.common.utils.StringUtil;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -122,7 +124,9 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
 
     @Override
     public IObjectValidate notNullAtSameTime(String fieldNameA, String fieldNameB){
-        return ifNotThenMustNotNull(fieldNameA, null, fieldNameB);
+        ifThenMustNotNull(fieldNameA, null, fieldNameB);
+        ifThenMustNotNull(fieldNameB, null, fieldNameA);
+        return this;
     }
 
     @Override
@@ -140,7 +144,7 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
             if(toValidate > max){
                 throw new ValidateException("value of '%s#%s' should less then '%s'", super.getObjName(), fieldName, String.valueOf(max));
             }
-        } catch (NumberFormatException e){
+        } catch (Exception e){
             throw new ValidateException("'%s#%s' is null or can not cast to Long", super.getObjName(), fieldName);
         }
         return this;
@@ -153,52 +157,61 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
             if(toValidate < min){
                 throw new ValidateException("value of '%s#%s' should more then '%s'", super.getObjName(), fieldName, String.valueOf(min));
             }
-        } catch (NumberFormatException e){
+        } catch (Exception e){
             throw new ValidateException("'%s#%s' is null or can not cast to Long", super.getObjName(), fieldName);
         }
         return this;
     }
 
-    /**
-     * 对象属性在两值之间校验
-     * @param fieldName
-     * @param min
-     * @param max
-     * @return
-     */
+    @Override
     public IObjectValidate between(String fieldName, long min, long max){
         min(fieldName, min);
         max(fieldName, max);
         return this;
     }
 
-    /**
-     * 集合最大数量
-     * @param fieldName
-     * @param max
-     * @return
-     */
-    public IObjectValidate listMaxSize(String fieldName, long max){
+    @Override
+    public IObjectValidate maxSize(String fieldName, long max){
         try{
-            List list = (List) reflectGetValue(fieldName);
-            if(list.size()>max){
-                throw new ValidateException("size of '%s#%s' should less then '%s'", super.getObjName(), fieldName, String.valueOf(max));
+            Object colOrMap = reflectGetValue(fieldName);
+            if(colOrMap instanceof Map){
+                Map map = (Map)colOrMap;
+                if(map.size()>max){
+                    throw new ValidateException("size of '%s#%s' should less then '%s'", super.getObjName(), fieldName, String.valueOf(max));
+                }
+            }else if(colOrMap instanceof Collection){
+                Collection collection = (Collection) colOrMap;
+                if(collection.size()>max){
+                    throw new ValidateException("size of '%s#%s' should less then '%s'", super.getObjName(), fieldName, String.valueOf(max));
+                }
+            }else{
+                throw new ValidateException("'%s#%s' is not a instance of Collection or Map", super.getObjName(), fieldName);
             }
-        } catch (ClassCastException e){
-            throw new ValidateException("'%s#%s' is null or can not cast to List", super.getObjName(), fieldName);
+        } catch (Exception e){
+            throw new ValidateException("'%s#%s' is null or can not cast to Collection or Map", super.getObjName(), fieldName);
         }
         return this;
     }
 
     @Override
-    public IObjectValidate listMinSize(String fieldName, long min) {
+    public IObjectValidate minSize(String fieldName, long min) {
         try{
-            List list = (List) reflectGetValue(fieldName);
-            if(list.size()<min){
-                throw new ValidateException("size of '%s#%s' should more then '%s'", super.getObjName(), fieldName, String.valueOf(min));
+            Object colOrMap = reflectGetValue(fieldName);
+            if(colOrMap instanceof Map){
+                Map map = (Map)colOrMap;
+                if(map.size()<min){
+                    throw new ValidateException("size of '%s#%s' should more then '%s'", super.getObjName(), fieldName, String.valueOf(min));
+                }
+            }else if(colOrMap instanceof Collection){
+                Collection collection = (Collection) colOrMap;
+                if(collection.size()<min){
+                    throw new ValidateException("size of '%s#%s' should more then '%s'", super.getObjName(), fieldName, String.valueOf(min));
+                }
+            }else{
+                throw new ValidateException("'%s#%s' is not a instance of Collection or Map", super.getObjName(), fieldName);
             }
-        } catch (ClassCastException e){
-            throw new ValidateException("'%s#%s' is null or can not cast to List", super.getObjName(), fieldName);
+        } catch (Exception e){
+            throw new ValidateException("'%s#%s' is null or can not cast to Collection or Map", super.getObjName(), fieldName);
         }
         return this;
     }
@@ -213,7 +226,7 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
             if(!m.matches()){
                 throw new ValidateException("'%s#%s' is not a phone number", super.getObjName(), fieldName);
             }
-        } catch (ClassCastException e){
+        } catch (Exception e){
             throw new ValidateException("'%s#%s' is null or can not cast to String", super.getObjName(), fieldName);
         }
         return this;

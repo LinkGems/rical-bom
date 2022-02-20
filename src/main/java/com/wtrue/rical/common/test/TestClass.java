@@ -38,8 +38,8 @@ class TestClass {
                 .object("person obj", () -> person)
                 .notNull("name","hobby")
                 .ifNullDefault("sex", 1)
-                .listMaxSize("works", 4)
-                .listMinSize("works", 1)
+                .maxSize("works", 4)
+                .minSize("works", 1)
                 .sub("works")
 //                .notNull("name","workType")
 //                .expression("workType is not atHome, salary must not be null", (w)->{
