@@ -35,12 +35,12 @@ class TestClass {
         person.setWorks(works);
 
         ValidateUtil valid = new ValidateUtil()
-                .object("person obj", () -> person)
-                .notNull("name","hobby")
-                .ifNullDefault("sex", 1)
-                .maxSize("works", 4)
-                .minSize("works", 1)
-                .sub("works")
+//                .object("person obj", () -> person)
+//                .notNull("name","hobby")
+//                .ifNullDefault("sex", 1)
+//                .listMaxSize("works", 4)
+//                .listMinSize("works", 1)
+//                .sub("works")
 //                .notNull("name","workType")
 //                .expression("workType is not atHome, salary must not be null", (w)->{
 //                    Work w1 = (Work) w;
@@ -49,8 +49,11 @@ class TestClass {
 //                    }
 //                    return true;
 //                })
-                .ifNullDefault("workType", 1)
-                .ifNotThenMustNotNull("workType", 3, "salary")
+//                .ifNullDefault("workType", 1)
+//                .ifNotThenMustNotNull("workType", 3, "salary")
+                .expression()
+                .check("check", ()->hobby!=null)
+                .check("check2", ()->hobby.size()<0)
                 .build();
 
 //        ValidateUtil valid = new ValidateUtil().expression().check("1==1", null).build();

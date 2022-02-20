@@ -19,7 +19,7 @@ public class BaseResponse<T> extends BaseObject{
     private BaseError error;
 
     public BaseResponse<T> populateResponse(T data){
-        return populateResponse(data, "sth. wrong");
+        return populateResponse(data, "sth. wrong, check log");
     }
 
     public BaseResponse<T> populateResponse(T data, String errMsg){

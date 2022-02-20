@@ -39,6 +39,38 @@ class ObjectValidateImpl extends ValidateObject implements IObjectValidate {
     }
 
     @Override
+    public IObjectValidate ifThenSub(String fieldNameA, Object expectValueB, String fieldNameC) {
+        if(!JSON.toJSONString(reflectGetValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))){
+            throw new ValidateException("%s#%s is not %s", super.getObjName(), fieldNameA, JSON.toJSONString(expectValueB));
+        }
+        return this;
+    }
+
+    @Override
+    public IObjectValidate ifNotThenSub(String fieldNameA, Object expectValueB, String fieldNameC) {
+        if(JSON.toJSONString(reflectGetValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))){
+            throw new ValidateException("%s#%s is not %s", super.getObjName(), fieldNameA, JSON.toJSONString(expectValueB));
+        }
+        return this;
+    }
+
+    @Override
+    public IObjectValidate ifThenSupSub(String fieldNameA, Object expectValueB, String fieldNameC) {
+        if(!JSON.toJSONString(reflectGetValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))){
+            throw new ValidateException("%s#%s is not %s", super.getObjName(), fieldNameA, JSON.toJSONString(expectValueB));
+        }
+        return this;
+    }
+
+    @Override
+    public IObjectValidate ifNotThenSupSub(String fieldNameA, Object expectValueB, String fieldNameC) {
+        if(JSON.toJSONString(reflectGetValue(fieldNameA)).equals(JSON.toJSONString(expectValueB))){
+            throw new ValidateException("%s#%s is not %s", super.getObjName(), fieldNameA, JSON.toJSONString(expectValueB));
+        }
+        return this;
+    }
+
+    @Override
     public ValidateUtil build() {
         return new ValidateUtil();
     }
