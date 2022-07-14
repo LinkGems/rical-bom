@@ -10,11 +10,61 @@ import java.util.function.Supplier;
  */
 public interface IObjectValidate {
 
+    /**
+     * 进入fieldName对应对象
+     * @param fieldName
+     * @return
+     */
     IObjectValidate sub(String fieldName);
 
+    /**
+     * 返回上级对象
+     * @return
+     */
     IObjectValidate sup();
 
+    /**
+     * 进入fieldName对应的同级对象
+     * @param fieldName
+     * @return
+     */
     IObjectValidate supSub(String fieldName);
+
+    /**
+     * 如果A的值为B，则进入filedC对象
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @return
+     */
+    IObjectValidate ifThenSub(String fieldNameA, Object expectValueB, String fieldNameC);
+
+    /**
+     * 如果A的值不为B，则进入filedC对象
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @return
+     */
+    IObjectValidate ifNotThenSub(String fieldNameA, Object expectValueB, String fieldNameC);
+
+    /**
+     * 如果A的值为B，则进入同级filedC对象
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @return
+     */
+    IObjectValidate ifThenSupSub(String fieldNameA, Object expectValueB, String fieldNameC);
+
+    /**
+     * 如果A的值不为B，则进入同级filedC对象
+     * @param fieldNameA
+     * @param expectValueB
+     * @param fieldNameC
+     * @return
+     */
+    IObjectValidate ifNotThenSupSub(String fieldNameA, Object expectValueB, String fieldNameC);
 
     /**
      * 对象构建方法，需保留
@@ -136,24 +186,6 @@ public interface IObjectValidate {
     IObjectValidate notNullAtSameTime(String fieldNameA, String fieldNameB);
 
     /**
-     * 如果A的值为B，则进入filedC
-     * @param fieldNameA
-     * @param expectValueB
-     * @param fieldNameC
-     * @return
-     */
-    IObjectValidate ifThenSub(String fieldNameA, Object expectValueB, String fieldNameC);
-
-    /**
-     * 如果A的值不为B，则进入filedC
-     * @param fieldNameA
-     * @param expectValueB
-     * @param fieldNameC
-     * @return
-     */
-    IObjectValidate ifNotThenSub(String fieldNameA, Object expectValueB, String fieldNameC);
-
-    /**
      * 对象属性最大值校验
      * @param fieldName
      * @param max
@@ -184,7 +216,7 @@ public interface IObjectValidate {
      * @param max
      * @return
      */
-    IObjectValidate listMaxSize(String fieldName, long max);
+    IObjectValidate maxSize(String fieldName, long max);
 
     /**
      * 集合最小数量
@@ -192,7 +224,7 @@ public interface IObjectValidate {
      * @param min
      * @return
      */
-    IObjectValidate listMinSize(String fieldName, long min);
+    IObjectValidate minSize(String fieldName, long min);
 
     /**
      * 校验是否为手机号
