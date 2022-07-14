@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wtrue</groupId>
+    <groupId>com.whitrue</groupId>
     <artifactId>rical.common</artifactId>
     <packaging>jar</packaging>
     <version>1.0.2-SNAPSHOT</version>
@@ -82,12 +82,12 @@
     <distributionManagement>
         <repository>
             <id>whitrue-hosted</id>
-            <name>Wtrue Nexus Release Repository</name>
+            <name>Whitrue Nexus Release Repository</name>
             <url>http://82.156.216.48:8081/repository/whitrue-hosted/</url>
         </repository>
         <snapshotRepository>
             <id>whitrue-snapshot</id>
-            <name>Wtrue Nexus Snapshot Repository</name>
+            <name>Whitrue Nexus Snapshot Repository</name>
             <url>http://82.156.216.48:8081/repository/whitrue-snapshot/</url>
         </snapshotRepository>
     </distributionManagement>
