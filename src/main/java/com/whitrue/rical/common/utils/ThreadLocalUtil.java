@@ -12,7 +12,11 @@ public class ThreadLocalUtil {
     private ThreadLocalUtil() {
     }
 
-    private static final ThreadLocal<BaseThreadLocal> tl = ThreadLocal.withInitial(BaseThreadLocal::new);
+    private static final ThreadLocal<BaseThreadLocal> tl = new ThreadLocal<>();
+
+    public static void init(BaseThreadLocal theThreadLocal){
+        set(theThreadLocal);
+    }
 
     public static void set(BaseThreadLocal data){
         tl.set(data);

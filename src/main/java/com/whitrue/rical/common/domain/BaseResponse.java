@@ -1,5 +1,6 @@
 package com.whitrue.rical.common.domain;
 
+import com.whitrue.rical.common.exception.BusinessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,28 +13,30 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class BaseResponse<T> extends BaseObject{
 
-    private boolean success = true;
+    private boolean success;
 
     private T data;
 
     private BaseError error;
 
-    public BaseResponse<T> populateResponse(T data){
-        return populateResponse(data, "sth. wrong, check log");
+    public static <T> BaseResponse<T> success(T data){
+        BaseResponse<T> response = new BaseResponse<>();
+        response.setSuccess(Boolean.TRUE);
+        response.setData(data);
+        return response;
     }
 
-    public BaseResponse<T> populateResponse(T data, String errMsg){
-        BaseResponse<T> resp = new BaseResponse<T>();
-        if(data != null){
-            resp.setData(data);
-        }else{
-            resp.setSuccess(false);
-            BaseError error = new BaseError();
-            error.setCode(1);
-            error.setMessage(errMsg);
-            resp.setError(error);
-        }
-        return resp;
+    public static BaseResponse failure(BusinessException ex){
+        BaseResponse response = new BaseResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setError(new BaseError(ex));
+        return response;
     }
 
+    public static BaseResponse failure(String code, String message){
+        BaseResponse response = new BaseResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setError(new BaseError(code, message));
+        return response;
+    }
 }
