@@ -1,33 +1,43 @@
 package com.whitrue.rical.common.utils;
 
-import com.whitrue.rical.common.domain.BaseThreadLocal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * @description:threadLocal工具类（待补充）
+ * @description: threadLocal工具类
  * @author: meidanlong
  * @date: 2022/1/21 2:38 PM
  */
 public class ThreadLocalUtil {
 
-    private ThreadLocalUtil() {
+    private static final ThreadLocal<Map<String, Object>> threadLocal = ThreadLocal.withInitial(HashMap::new);
+
+    public static Map<String, Object> getThreadLocal() {
+        return threadLocal.get();
     }
 
-    private static final ThreadLocal<BaseThreadLocal> tl = new ThreadLocal<>();
-
-    public static void init(BaseThreadLocal theThreadLocal){
-        set(theThreadLocal);
+    public static Object get(String key) {
+        Map<String, Object> map = threadLocal.get();
+        return map.get(key);
     }
 
-    public static void set(BaseThreadLocal data){
-        tl.set(data);
+    public static void setThreadLocal(Map<String, Object> keyValueMap) {
+        Map<String, Object> map = threadLocal.get();
+        map.putAll(keyValueMap);
     }
 
-    public static String getAppKey(){
-        return tl.get().getAppKey();
+    public static void set(String key, Object value) {
+        Map<String, Object> map = threadLocal.get();
+        map.put(key, value);
     }
 
-    public static void remove(){
-        tl.remove();
+    public static void removeThreadLocal() {
+        threadLocal.remove();
+    }
+
+    public static <T> T remove(String key) {
+        Map<String, Object> map = threadLocal.get();
+        return (T) map.remove(key);
     }
 
 }
