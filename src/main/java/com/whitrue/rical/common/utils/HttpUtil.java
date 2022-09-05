@@ -1,5 +1,6 @@
 package com.whitrue.rical.common.utils;
 
+import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -10,8 +11,10 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,10 +31,10 @@ import java.util.Map;
 public class HttpUtil {
 
     public static String doGet(String url) {							// 无参数get请求
-        return doGet(url, null);
+        return doGet(url, null, null);
     }
 
-    public static String doGet(String url, Map<String, String> param) {	// 带参数get请求
+    public static String doGet(String url, Map<String, String> header, Map<String, String> param) {	// 带参数get请求
         CloseableHttpClient httpClient = HttpClients.createDefault();	// 创建一个默认可关闭的Httpclient 对象
         String resultMsg = "";											// 设置返回值
         CloseableHttpResponse response = null;							// 定义HttpResponse 对象
@@ -44,7 +47,7 @@ public class HttpUtil {
             }
             URI uri = builder.build();
             HttpGet httpGet = new HttpGet(uri);					// 创建http GET请求
-//            httpGet.setHeader(key,value);                     //设置请求的请求头
+            httpGet.setHeaders(toHeaders(header));                     //设置请求的请求头
             response = httpClient.execute(httpGet);						// 执行请求
             if (response.getStatusLine().getStatusCode() == 200) {		// 判断返回状态为200则给返回值赋值
                 resultMsg = EntityUtils.toString(response.getEntity(), "UTF-8");
@@ -65,19 +68,19 @@ public class HttpUtil {
     }
 
     public static String doPost(String url) {							// 无参数post请求
-        return doPost(url, null);
+        return doPost(url, null, null);
     }
 
-    public static String doPost(String url, Map<String, String> param) {// 带参数post请求
+    public static String doPost(String url, Map<String, String> header, Map<String, String> param) {// 带参数post请求
         CloseableHttpClient httpClient = HttpClients.createDefault();	// 创建一个默认可关闭的Httpclient 对象
 
         CloseableHttpResponse response = null;
         String resultMsg = "";
         try {
             HttpPost httpPost = new HttpPost(url);						// 创建Http Post请求
-//            httpPost.setHeader(key,value);                            //设置post请求的请求头
+            httpPost.setHeaders(toHeaders(header));                            //设置post请求的请求头
             if (param != null) {										// 创建参数列表
-                List<NameValuePair> paramList = new ArrayList<NameValuePair>();
+                List<NameValuePair> paramList = new ArrayList<>();
                 for (String key : param.keySet()) {
                     paramList.add(new BasicNameValuePair(key, param.get(key)));
                 }
@@ -103,13 +106,13 @@ public class HttpUtil {
         return resultMsg;
     }
 
-    public static String doPostJson(String url, String json) {
+    public static String doPostJson(String url, Map<String, String> header, String json) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
         String resultString = "";
         try {
             HttpPost httpPost = new HttpPost(url);
-//            httpPost.setHeader(key,value);                            //设置post请求的请求头
+            httpPost.setHeaders(toHeaders(header));                               //设置post请求的请求头
             StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);     //指定传输参数为json
             httpPost.setEntity(entity);
             response = httpClient.execute(httpPost);
@@ -134,8 +137,20 @@ public class HttpUtil {
     public static void main(String[] args) {
         Map<String, String> m = new HashMap<>();
         m.put("appName", "test");
-        String s = HttpUtil.doPost("http://localhost:8001/job/handler/register", m);
+        String s = HttpUtil.doPost("http://localhost:8001/job/handler/register",m, m);
         System.out.println(s);
+    }
+
+    private static BasicHeader[] toHeaders(Map<String, String> headers){
+        if(CollectionUtils.isEmpty(headers)){
+            return new BasicHeader[0];
+        }
+        BasicHeader[] basicHeaders = new BasicHeader[headers.size()];
+        int index = 0;
+        for(Map.Entry header : headers.entrySet()){
+            basicHeaders[index++] = new BasicHeader(header.getKey().toString(), header.getValue().toString());
+        }
+        return basicHeaders;
     }
 
 }

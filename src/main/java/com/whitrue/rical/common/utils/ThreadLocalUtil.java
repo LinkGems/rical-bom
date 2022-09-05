@@ -1,6 +1,6 @@
 package com.whitrue.rical.common.utils;
 
-import com.whitrue.rical.common.domain.ThreadLocalData;
+import com.whitrue.rical.common.domain.BaseThreadLocal;
 
 /**
  * @description:threadLocal工具类（待补充）
@@ -12,9 +12,9 @@ public class ThreadLocalUtil {
     private ThreadLocalUtil() {
     }
 
-    private static final ThreadLocal<ThreadLocalData> tl = ThreadLocal.withInitial(ThreadLocalData::new);
+    private static final ThreadLocal<BaseThreadLocal> tl = ThreadLocal.withInitial(BaseThreadLocal::new);
 
-    public static void setTl(ThreadLocalData data){
+    public static void set(BaseThreadLocal data){
         tl.set(data);
     }
 
@@ -22,7 +22,7 @@ public class ThreadLocalUtil {
         return tl.get().getAppKey();
     }
 
-    public static void removeTl(){
+    public static void remove(){
         tl.remove();
     }
 

@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ThreadLocalData extends BaseObject{
+public class BaseThreadLocal extends BaseObject{
 
     private String appKey;
 }
