@@ -7,7 +7,7 @@
     <groupId>com.whitrue</groupId>
     <artifactId>rical.common</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
 
     <properties>
         <!--maven-->
