@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.domain;
 
+import com.wtrue.rical.common.enums.ErrorEnum;
 import com.wtrue.rical.common.exception.BusinessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +21,11 @@ public class BaseError extends BaseObject {
     public BaseError(String code, String message){
         this.code = code;
         this.message = message;
+    }
+
+    public BaseError(ErrorEnum errorEnum){
+        this.code = errorEnum.getCode();
+        this.message = errorEnum.getMessage();
     }
 
     public BaseError(BusinessException ex){

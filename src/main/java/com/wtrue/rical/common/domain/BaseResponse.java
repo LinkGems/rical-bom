@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.domain;
 
+import com.wtrue.rical.common.enums.ErrorEnum;
 import com.wtrue.rical.common.exception.BusinessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +24,13 @@ public class BaseResponse<T> extends BaseObject{
         BaseResponse<T> response = new BaseResponse<>();
         response.setSuccess(Boolean.TRUE);
         response.setData(data);
+        return response;
+    }
+
+    public static BaseResponse failure(){
+        BaseResponse response = new BaseResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setError(new BaseError(ErrorEnum.UNKNOWN_ERROR));
         return response;
     }
 
