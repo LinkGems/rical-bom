@@ -6,7 +6,7 @@ package com.whitrue.rical.common.validation.annotation;
  * @date: 2022/9/5 11:19
  */
 
-import com.whitrue.rical.common.validation.Validator.PhoneValidator;
+import com.whitrue.rical.common.validation.validator.PhoneValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

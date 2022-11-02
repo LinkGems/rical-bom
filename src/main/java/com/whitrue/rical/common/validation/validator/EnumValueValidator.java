@@ -1,6 +1,5 @@
-package com.whitrue.rical.common.validation.Validator;
+package com.whitrue.rical.common.validation.validator;
 
-import com.google.common.base.Strings;
 import com.whitrue.rical.common.validation.annotation.EnumValue;
 
 import javax.validation.ConstraintValidator;

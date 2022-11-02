@@ -1,4 +1,4 @@
-package com.whitrue.rical.common.validation.Validator;
+package com.whitrue.rical.common.validation.validator;
 
 /**
  * @description:

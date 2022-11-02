@@ -1,6 +1,9 @@
 package com.whitrue.rical.common.utils;
 
+import com.whitrue.rical.common.enums.ErrorEnum;
+import com.whitrue.rical.common.exception.BusinessException;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -21,8 +24,7 @@ public class ValidatorUtil {
     /**
      * 校验器
      */
-    private static Validator validator = Validation
-            .buildDefaultValidatorFactory().getValidator();
+    private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     /**
      * 参数校验
@@ -31,14 +33,24 @@ public class ValidatorUtil {
      * @param <T>
      */
     public static <T> void validate(T object, Class... groups) {
-        Set<ConstraintViolation<T>> validate =
-                validator.validate(object, groups);
+        Set<ConstraintViolation<T>> validateResultSet = validator.validate(object, groups);
 
         // 如果校验结果不为空
-        if (!CollectionUtils.isEmpty(validate)) {
-            StringBuilder exceptionMessage = new StringBuilder();
-            validate.forEach(constraintViolation -> exceptionMessage.append(constraintViolation.getMessage()));
-            throw new RuntimeException(exceptionMessage.toString());
+        if (!CollectionUtils.isEmpty(validateResultSet)) {
+            validateResultSet.stream().findFirst().ifPresent(vr -> {
+                // 只返回第一个不合法信息
+                throw new BusinessException(ErrorEnum.PARAM_ERROR, vr.getMessage());
+            });
+        }
+    }
+
+    /**
+     * 参数校验
+     * @param bindingResult
+     */
+    public static void validate(BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new BusinessException(ErrorEnum.PARAM_ERROR, bindingResult.getFieldError().getDefaultMessage());
         }
     }
 
