@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @description:
+ * @description: 基础错误
  * @author: meidanlong
  * @date: 2021/3/21 8:16 PM
  */
