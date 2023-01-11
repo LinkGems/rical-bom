@@ -1,7 +1,6 @@
 package com.wtrue.rical.common.exception;
 
 import com.wtrue.rical.common.enums.ErrorEnum;
-import com.wtrue.rical.common.exception.BusinessException;
 
 /**
  * @description:

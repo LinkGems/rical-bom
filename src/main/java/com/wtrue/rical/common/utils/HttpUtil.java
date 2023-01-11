@@ -133,13 +133,6 @@ public class HttpUtil {
         return resultString;
     }
 
-    public static void main(String[] args) {
-        Map<String, String> m = new HashMap<>();
-        m.put("appName", "test");
-        String s = HttpUtil.doPost("http://localhost:8001/job/handler/register",m, m);
-        System.out.println(s);
-    }
-
     private static BasicHeader[] toHeaders(Map<String, String> headers){
         if(CollectionUtils.isEmpty(headers)){
             return new BasicHeader[0];
