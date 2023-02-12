@@ -1,6 +1,6 @@
-package com.wtrue.rical.common.validation.validator;
+package com.wtrue.rical.common.utils.helper.validation.validator;
 
-import com.wtrue.rical.common.validation.annotation.EnumValue;
+import com.wtrue.rical.common.utils.helper.validation.annotation.EnumValue;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
