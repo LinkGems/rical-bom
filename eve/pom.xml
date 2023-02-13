@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <groupId>com.wtrue</groupId>
+    <artifactId>rical.common.eve</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+
+    <distributionManagement>
+        <repository>
+            <id>wtrue_hosted</id>
+            <name>Wtrue Nexus Release Repository</name>
+            <url>http://82.156.216.48:8081/repository/wtrue_hosted/</url>
+        </repository>
+        <snapshotRepository>
+            <id>wtrue_snapshot</id>
+            <name>Wtrue Nexus Snapshot Repository</name>
+            <url>http://82.156.216.48:8081/repository/wtrue_snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
