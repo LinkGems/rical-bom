@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.adam.utils;
+package com.wtrue.rical.common.eve.utils;
 
 import java.io.IOException;
 import java.math.BigInteger;

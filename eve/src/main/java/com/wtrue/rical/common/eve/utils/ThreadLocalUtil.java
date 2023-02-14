@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.adam.utils;
+package com.wtrue.rical.common.eve.utils;
 
 import java.util.HashMap;
 import java.util.Map;

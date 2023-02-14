@@ -1,7 +1,7 @@
-package com.wtrue.rical.common.adam.utils;
+package com.wtrue.rical.common.eve.utils;
 
 import com.wtrue.rical.common.adam.enums.ErrorEnum;
-import com.wtrue.rical.common.adam.exception.BusinessException;
+import com.wtrue.rical.common.adam.domain.BusinessException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 

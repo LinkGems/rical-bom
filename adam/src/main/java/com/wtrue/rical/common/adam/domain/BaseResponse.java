@@ -1,7 +1,6 @@
 package com.wtrue.rical.common.adam.domain;
 
 import com.wtrue.rical.common.adam.enums.ErrorEnum;
-import com.wtrue.rical.common.adam.exception.BusinessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

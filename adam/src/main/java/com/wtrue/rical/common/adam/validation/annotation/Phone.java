@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.adam.utils.helper.validation.annotation;
+package com.wtrue.rical.common.adam.validation.annotation;
 
 /**
  * @description:
@@ -6,7 +6,7 @@ package com.wtrue.rical.common.adam.utils.helper.validation.annotation;
  * @date: 2022/9/5 11:19
  */
 
-import com.wtrue.rical.common.adam.utils.helper.validation.validator.PhoneValidator;
+import com.wtrue.rical.common.adam.validation.validator.PhoneValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

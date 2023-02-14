@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.eve.domain;
 
+import com.wtrue.rical.common.adam.domain.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SelfCheckRequest {
+public class SelfCheckRequest extends BaseObject {
 
     /**
      * 目标服务的appname
@@ -52,8 +53,6 @@ public class SelfCheckRequest {
      * 方法参数数组
      */
     private Object[] parameters;
-
-
 
 
 }

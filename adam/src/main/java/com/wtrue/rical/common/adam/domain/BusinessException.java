@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.adam.exception;
+package com.wtrue.rical.common.adam.domain;
 
 import com.wtrue.rical.common.adam.enums.ErrorEnum;
 import lombok.Getter;

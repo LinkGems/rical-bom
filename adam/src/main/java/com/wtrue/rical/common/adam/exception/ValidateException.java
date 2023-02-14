@@ -1,5 +1,6 @@
 package com.wtrue.rical.common.adam.exception;
 
+import com.wtrue.rical.common.adam.domain.BusinessException;
 import com.wtrue.rical.common.adam.enums.ErrorEnum;
 
 /**

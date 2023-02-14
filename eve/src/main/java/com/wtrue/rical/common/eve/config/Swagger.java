@@ -1,4 +1,4 @@
-package com.wtrue.rical.common.adam.config;
+package com.wtrue.rical.common.eve.config;
 
 import lombok.Builder;
 import springfox.documentation.builders.ApiInfoBuilder;
