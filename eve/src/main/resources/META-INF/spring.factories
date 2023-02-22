@@ -1,13 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.wtrue.rical.common.eve.controller.SelfCheckController,\
-  com.wtrue.rical.common.eve.config.Swagger,\
-  com.wtrue.rical.common.eve.exception.BaseExceptionHandler,\
-  com.wtrue.rical.common.eve.utils.AESUtil,\
-  com.wtrue.rical.common.eve.utils.DateTimeUtil,\
-  com.wtrue.rical.common.eve.utils.HttpUtil,\
-  com.wtrue.rical.common.eve.utils.MD5Util,\
-  com.wtrue.rical.common.eve.utils.RSAUtil,\
-  com.wtrue.rical.common.eve.utils.StringUtil,\
-  com.wtrue.rical.common.eve.utils.ThreadLocalUtil,\
-  com.wtrue.rical.common.eve.utils.UUIDUtil,\
-  com.wtrue.rical.common.eve.utils.ValidatorUtil
+  com.wtrue.rical.common.eve.exception.BaseExceptionHandler
