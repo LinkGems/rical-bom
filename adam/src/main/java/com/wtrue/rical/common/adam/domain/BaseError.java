@@ -27,7 +27,7 @@ public class BaseError extends BaseObject {
         this.message = errorEnum.getMessage();
     }
 
-    public BaseError(BusinessException ex){
+    public BaseError(BaseException ex){
         this.code = ex.getCode();
         this.message = ex.getMessage();
     }

@@ -1,7 +1,7 @@
 package com.wtrue.rical.common.eve.utils;
 
 import com.wtrue.rical.common.adam.enums.ErrorEnum;
-import com.wtrue.rical.common.adam.domain.BusinessException;
+import com.wtrue.rical.common.adam.domain.BaseException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 
@@ -39,7 +39,7 @@ public class ValidatorUtil {
         if (!CollectionUtils.isEmpty(validateResultSet)) {
             validateResultSet.stream().findFirst().ifPresent(vr -> {
                 // 只返回第一个不合法信息
-                throw new BusinessException(ErrorEnum.PARAM_ERROR, vr.getMessage());
+                throw new BaseException(ErrorEnum.PARAM_ERROR, vr.getMessage());
             });
         }
     }
@@ -50,7 +50,7 @@ public class ValidatorUtil {
      */
     public static void validate(BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            throw new BusinessException(ErrorEnum.PARAM_ERROR, bindingResult.getFieldError().getDefaultMessage());
+            throw new BaseException(ErrorEnum.PARAM_ERROR, bindingResult.getFieldError().getDefaultMessage());
         }
     }
 

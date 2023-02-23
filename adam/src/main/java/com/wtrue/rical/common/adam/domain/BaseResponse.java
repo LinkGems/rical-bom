@@ -33,7 +33,7 @@ public class BaseResponse<T> extends BaseObject{
         return response;
     }
 
-    public static BaseResponse failure(BusinessException ex){
+    public static BaseResponse failure(BaseException ex){
         BaseResponse response = new BaseResponse();
         response.setSuccess(Boolean.FALSE);
         response.setError(new BaseError(ex));

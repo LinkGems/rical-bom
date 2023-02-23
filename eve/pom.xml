@@ -5,7 +5,7 @@
     <groupId>com.wtrue</groupId>
     <artifactId>rical.common.eve</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
 
 
@@ -24,7 +24,7 @@
         <!--xxl-job-->
         <xxl-job.version>2.3.1</xxl-job.version>
         <!--服务依赖-->
-        <adam-version>1.0.1</adam-version>
+        <adam-version>1.0.3-SNAPSHOT</adam-version>
         <!--基础能力-->
         <joda-time.version>2.10.13</joda-time.version>
         <httpcore.version>4.4.10</httpcore.version>

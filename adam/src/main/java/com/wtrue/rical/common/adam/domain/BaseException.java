@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author: meidanlong
  * @date: 2022/9/5 11:46
  */
-public class BusinessException extends RuntimeException {
+public class BaseException extends RuntimeException {
 
     /**
      * 异常编号
@@ -20,9 +20,19 @@ public class BusinessException extends RuntimeException {
      * 根据枚举构造业务类异常
      * @param error
      */
-    public BusinessException(ErrorEnum error) {
+    public BaseException(ErrorEnum error) {
         super(error.getMessage());
         this.code = error.getCode();
+    }
+
+    /**
+     * 自定义异常
+     * @param error
+     * @param message
+     */
+    public BaseException(String error, String message) {
+        super(message);
+        this.code = error;
     }
 
     /**
@@ -30,7 +40,7 @@ public class BusinessException extends RuntimeException {
      * @param error
      * @param message
      */
-    public BusinessException(ErrorEnum error, String message) {
+    public BaseException(ErrorEnum error, String message) {
         super(message);
         this.code = error.getCode();
     }
@@ -40,7 +50,7 @@ public class BusinessException extends RuntimeException {
      * @param error
      * @param cause
      */
-    public BusinessException(ErrorEnum error, Throwable cause) {
+    public BaseException(ErrorEnum error, Throwable cause) {
         super(cause);
         this.code = error.getCode();
     }

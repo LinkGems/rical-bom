@@ -1,6 +1,6 @@
 package com.wtrue.rical.common.adam.exception;
 
-import com.wtrue.rical.common.adam.domain.BusinessException;
+import com.wtrue.rical.common.adam.domain.BaseException;
 import com.wtrue.rical.common.adam.enums.ErrorEnum;
 
 /**
@@ -8,7 +8,7 @@ import com.wtrue.rical.common.adam.enums.ErrorEnum;
  * @author: meidanlong
  * @date: 2022/1/23 7:28 PM
  */
-public class ValidateException extends BusinessException {
+public class ValidateException extends BaseException {
     public ValidateException(String message) {
         super(ErrorEnum.PARAM_ERROR, message);
     }

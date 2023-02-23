@@ -1,7 +1,7 @@
 package com.wtrue.rical.common.eve.exception;
 
 import com.wtrue.rical.common.adam.domain.BaseResponse;
-import com.wtrue.rical.common.adam.domain.BusinessException;
+import com.wtrue.rical.common.adam.domain.BaseException;
 import com.wtrue.rical.common.adam.enums.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,8 +21,8 @@ public class BaseExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(BusinessException.class)
-    public BaseResponse businessExceptionHandle(BusinessException e) {
+    @ExceptionHandler(BaseException.class)
+    public BaseResponse businessExceptionHandle(BaseException e) {
         log.error("捕捉到业务类异常：", e);
         return BaseResponse.failure(e);
     }
