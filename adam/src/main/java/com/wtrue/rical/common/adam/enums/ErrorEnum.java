@@ -32,6 +32,7 @@ public enum ErrorEnum {
     DELETE_FAILURE("3004", "删除失败"),
     RATE_LIMIT_ERROR("3005", "限流异常"),
     FILE_UPLOAD_FAILURE("3006", "文件上传失败"),
+    UTILS_ERROR("3007", "工具类异常"),
     // 31** 业务自定义异常
     ;
 

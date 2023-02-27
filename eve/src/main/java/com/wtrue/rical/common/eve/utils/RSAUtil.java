@@ -1,9 +1,16 @@
 package com.wtrue.rical.common.eve.utils;
 
+import com.wtrue.rical.common.adam.domain.BaseException;
+import com.wtrue.rical.common.adam.enums.ErrorEnum;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -11,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -20,67 +28,118 @@ import java.security.spec.X509EncodedKeySpec;
  * 公钥一般提供给外部进行使用，私钥需要放置在服务器端保证安全性。
  * 特点：加密安全性很高，但是加密速度较慢
  *
+ * @author meidanlong
  */
 public class RSAUtil {
 
-	private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCQk33iNdA8Iey7J6XrBsidqn6u8EDLWPHsfEUgLQ3qiTikhPKDTzZkpAfU/O0x6NvSKa7Dp0+uqWT3vnW1De0+3u8mCYdVfOdH94VG4xg5U5UrRJei8HhPiXuvKQ+6NBtebCCW5adZ4pBgOiU14cJLhVmm+dYiLo3IDD5LqrlomQIDAQAB";
-
-	private static final String PRIVATE_KEY = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJCTfeI10Dwh7LsnpesGyJ2qfq7wQMtY8ex8RSAtDeqJOKSE8oNPNmSkB9T87THo29IprsOnT66pZPe+dbUN7T7e7yYJh1V850f3hUbjGDlTlStEl6LweE+Je68pD7o0G15sIJblp1nikGA6JTXhwkuFWab51iIujcgMPkuquWiZAgMBAAECgYA1UT9mciQWWQh9yNRmhXzssFjB2TZ8B5RIe1fe0t7D9NEf0yvAgzDzEo8U3CX5dv/CVL7vxr8bEbt7phCwsa8hJiLEOr7hLZaJzXVTbvfqb91oCZGNkqDQ3NJfGBMVgUmltEYF2Bbk3U0NDyat+Gu54tRd2OH+adJYKsD0XYeDBQJBAN5FE8E04A4FA1q8mQbVTSVJDYIEJwOrdC0r3iZ7za5CyXGk+br8pFalRePFaksRGdN32+mYhDKVNrNHspAObVMCQQCmhBsD+xiWrmpnrzeIfCW1cX8qRC3/RMkq0ACw3l6YedNFdN2Tb5WsRHmcbCI9y8mfLHiG/X1R+zHZKG67EKjjAkAmvAkGSY2mQ89i160fWLq5/bIh71FRPWbgnF15fWfJr4/lgyeWI4MMKn80g2nTrSZACQpE+jRHkGNY+OywWCNLAkEAli5nvztkfeJpDYK2b16pE/B9ZL2BTs3XMcnQFbU5VAPsTKSOgz8MmwZXOIE+kMWP3wPY4McXlC0eVGFnHUh1SQJAeAl3RPk+XbZDMYfPkStRJwocG9Ap+88mwTgR1I7uPzZ1aM84/WsQskiVMXv2SZLmMWvYtnhIKosL6IACp2AcDA==";
-
-	public static void main(String[] args) throws Exception{
-		String str = RSAUtil.encrypt("123456");
-		System.out.println(str);
+	public static RSAPublicKey getPublicKey(String publicKey) {
+		try{
+			byte[] decoded = Base64.decodeBase64(publicKey);
+			return (RSAPublicKey) KeyFactory.getInstance("RSA")
+					.generatePublic(new X509EncodedKeySpec(decoded));
+		}catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		}
 	}
 
-	public static String getPublicKeyStr(){
-		return PUBLIC_KEY;
-	}
-
-	public static RSAPublicKey getPublicKey() throws Exception {
-		byte[] decoded = Base64.decodeBase64(PUBLIC_KEY);
-		return (RSAPublicKey) KeyFactory.getInstance("RSA")
-				.generatePublic(new X509EncodedKeySpec(decoded));
-	}
-
-	public static RSAPrivateKey getPrivateKey() throws Exception {
-		byte[] decoded = Base64.decodeBase64(PRIVATE_KEY);
-		return (RSAPrivateKey) KeyFactory.getInstance("RSA")
-				.generatePrivate(new PKCS8EncodedKeySpec(decoded));
+	public static RSAPrivateKey getPrivateKey(String privateKey) {
+		try {
+			byte[] decoded = Base64.decodeBase64(privateKey);
+			return (RSAPrivateKey) KeyFactory.getInstance("RSA")
+					.generatePrivate(new PKCS8EncodedKeySpec(decoded));
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		}
 	}
 	
-	public static RSAKey generateKeyPair() throws NoSuchAlgorithmException {
-		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-		keyPairGen.initialize(1024, new SecureRandom());
-		KeyPair keyPair = keyPairGen.generateKeyPair();
-		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-		String publicKeyString = new String(Base64.encodeBase64(publicKey.getEncoded()));
-		String privateKeyString = new String(Base64.encodeBase64(privateKey.getEncoded()));
-		return new RSAKey(privateKey, privateKeyString, publicKey, publicKeyString);
+	public static RSAKey generateKeyPair() {
+		try {
+			KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
+			keyPairGen.initialize(1024, new SecureRandom());
+			KeyPair keyPair = keyPairGen.generateKeyPair();
+			RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+			RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+			String publicKeyString = new String(Base64.encodeBase64(publicKey.getEncoded()));
+			String privateKeyString = new String(Base64.encodeBase64(privateKey.getEncoded()));
+			return new RSAKey(privateKey, privateKeyString, publicKey, publicKeyString);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		}
 	}
 
-	public static String encrypt(String source) throws Exception {
-		byte[] decoded = Base64.decodeBase64(PUBLIC_KEY);
-		RSAPublicKey rsaPublicKey = (RSAPublicKey) KeyFactory.getInstance("RSA")
-				.generatePublic(new X509EncodedKeySpec(decoded));
-		Cipher cipher = Cipher.getInstance("RSA");
-		cipher.init(1, rsaPublicKey);
-		return Base64.encodeBase64String(cipher.doFinal(source.getBytes(StandardCharsets.UTF_8)));
+	public static String encrypt(String publicKey, String source) {
+		try{
+			byte[] decoded = Base64.decodeBase64(publicKey);
+			RSAPublicKey rsaPublicKey = (RSAPublicKey) KeyFactory.getInstance("RSA")
+					.generatePublic(new X509EncodedKeySpec(decoded));
+			Cipher cipher = Cipher.getInstance("RSA");
+			cipher.init(1, rsaPublicKey);
+			return Base64.encodeBase64String(cipher.doFinal(source.getBytes(StandardCharsets.UTF_8)));
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		}
 	}
 
-	public static Cipher getCipher() throws Exception {
-		byte[] decoded = Base64.decodeBase64(PRIVATE_KEY);
-		RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) KeyFactory.getInstance("RSA")
-				.generatePrivate(new PKCS8EncodedKeySpec(decoded));
-		Cipher cipher = Cipher.getInstance("RSA");
-		cipher.init(2, rsaPrivateKey);
-		return cipher;
+	public static Cipher getCipher(String privateKey) {
+		try{
+			byte[] decoded = Base64.decodeBase64(privateKey);
+			RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) KeyFactory.getInstance("RSA")
+					.generatePrivate(new PKCS8EncodedKeySpec(decoded));
+			Cipher cipher = Cipher.getInstance("RSA");
+			cipher.init(2, rsaPrivateKey);
+			return cipher;
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		}
 	}
 
-	public static String decrypt(String text) throws Exception {
-		Cipher cipher = getCipher();
-		byte[] inputByte = Base64.decodeBase64(text.getBytes(StandardCharsets.UTF_8));
-		return new String(cipher.doFinal(inputByte));
+	public static String decrypt(String priavteKey, String text) {
+		try{
+			Cipher cipher = getCipher(priavteKey);
+			byte[] inputByte = Base64.decodeBase64(text.getBytes(StandardCharsets.UTF_8));
+			return new String(cipher.doFinal(inputByte));
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+			throw new BaseException(ErrorEnum.UTILS_ERROR, e);
+		}
 	}
 	
 	public static class RSAKey {

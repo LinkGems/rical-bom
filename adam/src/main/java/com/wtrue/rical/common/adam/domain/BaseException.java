@@ -54,4 +54,22 @@ public class BaseException extends RuntimeException {
         super(cause);
         this.code = error.getCode();
     }
+
+    /**
+     * 根据Throwable构造业务类异常
+     * @param cause
+     */
+    public BaseException(Throwable cause) {
+        super(cause);
+        this.code = ErrorEnum.XXX.getCode();
+    }
+
+    /**
+     * 根据异常信息构造业务类异常
+     * @param message
+     */
+    public BaseException(String message) {
+        super(message);
+        this.code = ErrorEnum.XXX.getCode();
+    }
 }
