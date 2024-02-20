@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.linkgems.rical.common.eve.controller.SelfCheckController,\
-  com.linkgems.rical.common.eve.exception.BaseExceptionHandler,\
-  com.linkgems.rical.common.eve.config.SwaggerConfig,\
-  com.linkgems.rical.common.eve.interceptor.ProviderInterceptor
+  org.linkgems.rical.common.eve.controller.SelfCheckController,\
+  org.linkgems.rical.common.eve.exception.BaseExceptionHandler,\
+  org.linkgems.rical.common.eve.config.SwaggerConfig,\
+  org.linkgems.rical.common.eve.interceptor.ProviderInterceptor

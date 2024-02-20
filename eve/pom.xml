@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId>cn.LinkGems</groupId>
-    <artifactId>rical.common.eve</artifactId>
+    <groupId>org.LinkGems.rical</groupId>
+    <artifactId>common.eve</artifactId>
     <description>核心依赖</description>
     <packaging>jar</packaging>
     <version>1.0.4-SNAPSHOT</version>
@@ -24,15 +24,15 @@
         <!--hutool-->
         <hutool.version>5.8.16</hutool.version>
         <!--fastjson-->
-        <fastjson.version>1.2.69</fastjson.version>
+        <fastjson.version>2.0.46</fastjson.version>
         <!--mysql-->
-        <mysql.version>8.0.16</mysql.version>
+        <mysql.version>8.0.33</mysql.version>
         <tk-mybatis.version>2.1.5</tk-mybatis.version>
         <tk-mybatis-mapper.version>4.1.5</tk-mybatis-mapper.version>
         <!--xxl-job-->
-        <xxl-job.version>2.3.1</xxl-job.version>
+        <xxl-job.version>2.4.0</xxl-job.version>
         <!--服务依赖-->
-        <adam-version>1.0.3-SNAPSHOT</adam-version>
+        <adam-version>1.0.4-SNAPSHOT</adam-version>
     </properties>
 
     <dependencyManagement>
@@ -143,7 +143,6 @@
             <version>${fastjson.version}</version>
         </dependency>
 
-
         <!--mysql-->
         <dependency>
             <groupId>mysql</groupId>
@@ -163,9 +162,10 @@
             <version>${xxl-job.version}</version>
         </dependency>
 
+        <!--Adam-->
         <dependency>
-            <groupId>com.wtrue</groupId>
-            <artifactId>rical.common.adam</artifactId>
+            <groupId>org.LinkGems.rical</groupId>
+            <artifactId>common.adam</artifactId>
             <version>${adam-version}</version>
         </dependency>
 
