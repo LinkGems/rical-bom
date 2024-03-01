@@ -47,14 +47,14 @@
 
     <distributionManagement>
         <repository>
-            <id>wtrue_hosted</id>
-            <name>Wtrue Nexus Release Repository</name>
-            <url>http://82.156.216.48:8081/repository/wtrue_hosted/</url>
+            <id>LinkGems_hosted</id>
+            <name>LinkGems Nexus Release Repository</name>
+            <url>http://82.156.216.48:8081/repository/LinkGems_hosted/</url>
         </repository>
         <snapshotRepository>
-            <id>wtrue_snapshot</id>
-            <name>Wtrue Nexus Snapshot Repository</name>
-            <url>http://82.156.216.48:8081/repository/wtrue_snapshot/</url>
+            <id>LinkGems_snapshot</id>
+            <name>LinkGems Nexus Snapshot Repository</name>
+            <url>http://82.156.216.48:8081/repository/LinkGems_snapshot/</url>
         </snapshotRepository>
     </distributionManagement>
 
