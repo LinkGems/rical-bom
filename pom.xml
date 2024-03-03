@@ -11,6 +11,21 @@
     <modules>
         <module>adam</module>
         <module>eve</module>
+        <module>core</module>
+        <module>web</module>
     </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>LinkGems_hosted</id>
+            <name>LinkGems Nexus Release Repository</name>
+            <url>http://82.156.216.48:8081/repository/LinkGems_hosted/</url>
+        </repository>
+        <snapshotRepository>
+            <id>LinkGems_snapshot</id>
+            <name>LinkGems Nexus Snapshot Repository</name>
+            <url>http://82.156.216.48:8081/repository/LinkGems_snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

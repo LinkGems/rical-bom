@@ -1,4 +1,4 @@
-package org.linkgems.rical.common.eve.utils;
+package org.linkgems.rical.common.core.utils;
 
 import org.linkgems.rical.common.adam.exception.ValidateException;
 import org.springframework.util.CollectionUtils;

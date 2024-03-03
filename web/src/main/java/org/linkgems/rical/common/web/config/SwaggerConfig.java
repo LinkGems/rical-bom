@@ -1,4 +1,4 @@
-package org.linkgems.rical.common.eve.config;
+package org.linkgems.rical.common.web.config;
 
 
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package org.linkgems.rical.common.eve.utils;
+package org.linkgems.rical.common.core.utils;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;

@@ -1,10 +1,10 @@
 package org.linkgems.rical.common.eve.controller;
 
-import org.linkgems.rical.common.eve.domain.SelfCheckRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.linkgems.rical.common.eve.utils.JacksonUtil;
+import org.linkgems.rical.common.eve.domain.SelfCheckRequest;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;

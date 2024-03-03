@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.LinkGems.rical</groupId>
+        <artifactId>common</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <groupId>org.linkgems.rical</groupId>
+    <artifactId>common.web</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <!--spring-boot-->
+        <spring-boot.version>2.1.13.RELEASE</spring-boot.version>
+        <!--swagger-->
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
+        <!--adam-->
+        <common.adam.version>1.0.4-SNAPSHOT</common.adam.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!--spring-boot-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- swagger2 配置 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>${swagger-bootstrap-ui.version}</version>
+        </dependency>
+
+        <!--Adam-->
+        <dependency>
+            <groupId>org.LinkGems.rical</groupId>
+            <artifactId>common.adam</artifactId>
+            <version>${common.adam.version}</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <distributionManagement>
+        <repository>
+            <id>LinkGems_hosted</id>
+            <name>LinkGems Nexus Release Repository</name>
+            <url>http://82.156.216.48:8081/repository/LinkGems_hosted/</url>
+        </repository>
+        <snapshotRepository>
+            <id>LinkGems_snapshot</id>
+            <name>LinkGems Nexus Snapshot Repository</name>
+            <url>http://82.156.216.48:8081/repository/LinkGems_snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

@@ -1,4 +1,4 @@
-package org.linkgems.rical.common.eve.config;
+package org.linkgems.rical.common.web.config;
 
 import lombok.Builder;
 import springfox.documentation.builders.ApiInfoBuilder;

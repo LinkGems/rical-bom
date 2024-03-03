@@ -1,4 +1,4 @@
-package org.linkgems.rical.common.eve.utils;
+package org.linkgems.rical.common.core.utils;
 
 import java.util.HashMap;
 import java.util.Map;
