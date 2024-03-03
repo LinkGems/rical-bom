@@ -11,6 +11,7 @@
     <modules>
         <module>adam</module>
         <module>eve</module>
+        <module>eden</module>
     </modules>
 
 </project>
