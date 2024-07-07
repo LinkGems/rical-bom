@@ -1,6 +1,5 @@
 package org.linkgems.rical.common.eve.aspect;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +12,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.linkgems.rical.common.adam.domain.BaseException;
-import org.linkgems.rical.common.adam.domain.BaseObject;
 import org.linkgems.rical.common.eve.domain.annotation.Log;
-import org.linkgems.rical.common.eve.utils.JacksonUtil;
+import org.linkgems.rical.common.eve.domain.constant.AnnotationConstant;
+import org.linkgems.rical.common.eve.domain.constant.LogMarkConstant;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -40,9 +39,7 @@ import java.util.stream.Collectors;
 @Component
 public class LogAspect {
 
-    private final static String CLASS_METHOD_NAME = "[%s.%s]";
     private final static String TRACE_TEMP = "%s#%s#%d";
-    private final static String OMITTED_MARKER = "...";
 
     @Pointcut("@annotation(org.linkgems.rical.common.eve.domain.annotation.Log)")
     public void pointCut() {
@@ -51,7 +48,7 @@ public class LogAspect {
     @Around("pointCut()")
     public Object pointCut(ProceedingJoinPoint joinPoint) throws Throwable {
         LogDetail logDetail = populateLogDetail(joinPoint);
-        String classMethodName = String.format(CLASS_METHOD_NAME, logDetail.getClazz(), logDetail.getMethod());
+        String classMethodName = String.format(AnnotationConstant.CLASS_METHOD_NAME, logDetail.getClazz(), logDetail.getMethod());
         // 初始化计时器
         StopWatch timer = new StopWatch();
         timer.start(Thread.currentThread().getId() + "_" + classMethodName + "_" + System.currentTimeMillis());
@@ -65,8 +62,8 @@ public class LogAspect {
             return result;
         } catch (BaseException bex) {
             timer.stop();
-            log.info("!=={} - {} - cost={}ms : businessException={}, check the error.log - params={}", classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), bex.getMessage(), getObjectStr(logDetail.args));
-            log.error("!!!{} - {} : {} - params={}", classMethodName, logDetail.getDesc(), getObjectStr(logDetail.args), bex);
+            log.info("{}{} - {} - cost={}ms : businessException={}, check the error.log - params={}", LogMarkConstant.LOG_ERROR_MARK, classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), bex.getMessage(), getObjectStr(logDetail.args));
+            log.error("{}{} - {} : {} - params={}", LogMarkConstant.LOG_ERROR_MARK, classMethodName, logDetail.getDesc(), getObjectStr(logDetail.args), bex);
             Throwable cause = bex.getCause();
             if (cause != null) {
                 throw cause;
@@ -75,21 +72,21 @@ public class LogAspect {
             }
         } catch (Exception ex) {
             timer.stop();
-            log.info("!=={} - {} - cost={}ms : exception={}, check the error.log - params={}", classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), ex.getMessage(), getObjectStr(logDetail.args));
-            log.error("!!!{} - {} : {} - params={}, trace={}", classMethodName, logDetail.getDesc(), ex.getMessage(), getObjectStr(logDetail.args), ex);
+            log.info("{}{} - {} - cost={}ms : exception={}, check the error.log - params={}", LogMarkConstant.LOG_ERROR_MARK, classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), ex.getMessage(), getObjectStr(logDetail.args));
+            log.error("{}{} - {} : {} - params={}, trace={}", LogMarkConstant.LOG_ERROR_MARK, classMethodName, logDetail.getDesc(), ex.getMessage(), getObjectStr(logDetail.args), ex);
             throw ex;
         }
     }
 
     private void postLog(LogDetail logDetail, String classMethodName, StopWatch timer, Object result) {
         try {
-            log.info("<=={} - {} - cost={}ms : result={}, params={}", classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), getObjectStr(result), getObjectStr(logDetail.args));
+            log.info("{}{} - {} - cost={}ms : result={}, params={}", LogMarkConstant.LOG_INFO_RETURN_MARK, classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), getObjectStr(result), getObjectStr(logDetail.args));
         } catch (Exception ex) {
-            log.info("<=={} - {} - cost={}ms : can not get result or params, exception={}, check the error.log", classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), ex.getMessage());
-            log.error("!==[LogAspect.postLog] - exception={}", ex.getMessage(), ex);
+            log.info("{}{} - {} - cost={}ms : can not get result or params, exception={}, check the error.log", LogMarkConstant.LOG_INFO_RETURN_MARK, classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), ex.getMessage());
+            log.error("{}[LogAspect.postLog] - exception={}", LogMarkConstant.LOG_ERROR_MARK, ex.getMessage(), ex);
         } catch (Error err) {
-            log.info("<=={} - {} - cost={}ms : can not get result or params, error={}, check the error.log", classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), err.getMessage());
-            log.error("!==[LogAspect.postLog] - error={}", err.getMessage(), err);
+            log.info("{}{} - {} - cost={}ms : can not get result or params, error={}, check the error.log", LogMarkConstant.LOG_INFO_RETURN_MARK, classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), err.getMessage());
+            log.error("{}[LogAspect.postLog] - error={}", LogMarkConstant.LOG_ERROR_MARK, err.getMessage(), err);
         }
     }
 
@@ -125,15 +122,16 @@ public class LogAspect {
             // 4、是否打印
             logDetail.setOnlyOnError(log.onlyOnError());
         } catch (Exception ex) {
-            log.info("!== [LogAspect.populateLogDetail] - exception={}, check the error.log", ex.getMessage());
-            log.error("!!![LogAspect.populateLogDetail] - exception={}", ex.getMessage(), ex);
+            log.info("{}[LogAspect.populateLogDetail] - exception={}, check the error.log", LogMarkConstant.LOG_ERROR_MARK, ex.getMessage());
+            log.error("{}[LogAspect.populateLogDetail] - exception={}", LogMarkConstant.LOG_ERROR_MARK, ex.getMessage(), ex);
         } catch (Error err) {
-            log.info("!== [LogAspect.populateLogDetail] - error={}, check the error.log", err.getMessage());
-            log.error("!!![LogAspect.populateLogDetail] - error={}", err.getMessage(), err);
+            log.info("{}[LogAspect.populateLogDetail] - error={}, check the error.log", LogMarkConstant.LOG_ERROR_MARK, err.getMessage());
+            log.error("{}[LogAspect.populateLogDetail] - error={}", LogMarkConstant.LOG_ERROR_MARK, err.getMessage(), err);
         }
         return logDetail;
     }
 
+    @Deprecated
     private String exceptionStackTrace(Exception e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
         if (stackTrace != null && stackTrace.length > 0) {
@@ -144,11 +142,7 @@ public class LogAspect {
     }
 
     private String getObjectStr(Object obj) {
-        if (obj instanceof BaseObject) {
-            return obj.toString();
-        } else {
-            return JSONUtil.toJsonStr(obj);
-        }
+        return JSONUtil.toJsonStr(obj);
     }
 
     @Getter
