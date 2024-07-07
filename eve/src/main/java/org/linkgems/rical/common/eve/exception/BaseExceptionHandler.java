@@ -23,8 +23,8 @@ public class BaseExceptionHandler {
      * @return
      */
     @ExceptionHandler(BaseException.class)
-    public BaseResponse businessExceptionHandle(BaseException e) {
-        log.error("捕捉到业务类异常：", e);
+    public BaseResponse baseExceptionHandle(BaseException e) {
+        log.error("捕捉到基础异常：", e);
         return BaseResponse.failure(e);
     }
 

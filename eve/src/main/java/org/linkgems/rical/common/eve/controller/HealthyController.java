@@ -1,14 +1,15 @@
 package org.linkgems.rical.common.eve.controller;
 
-import org.linkgems.rical.common.eve.domain.SelfCheckRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.linkgems.rical.common.eve.domain.request.SelfCheckRequest;
 import org.linkgems.rical.common.eve.utils.JacksonUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ import java.lang.reflect.Method;
  * 请求案例：
  * {
  * "appName": "rical-gateway",
- * "beanClazzName": "com.wtrue.rical.gateway.service.ITestService",
+ * "beanClazzName": "com.linkgems.rical.gateway.service.ITestService",
  * "methodName": "getTestMap",
  * "parameterTypes": [
  * "java.lang.String",
@@ -35,7 +36,7 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 @RestController
-public class SelfCheckController implements BeanFactoryAware {
+public class HealthyController implements BeanFactoryAware {
 
     /**
      * 业务方引入该export包，就会把业务方自己的appname放进去
@@ -50,8 +51,13 @@ public class SelfCheckController implements BeanFactoryAware {
         this.beanFactory = beanFactory;
     }
 
+    @GetMapping("healthy")
+    public String healthy() {
+        return "success";
+    }
 
-    @PostMapping("selfCheck.json")
+
+    @PostMapping("selfCheck")
     public String testInvoke(@RequestBody SelfCheckRequest request) {
         try {
             //1.安全检测

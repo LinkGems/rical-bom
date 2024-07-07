@@ -1,12 +1,12 @@
-package org.linkgems.rical.common.eve.interceptor;
+package org.linkgems.rical.common.eve.aspect;
 
 import cn.hutool.core.util.StrUtil;
-import org.linkgems.rical.common.eve.utils.ThreadLocalUtil;
 import org.apache.dubbo.rpc.RpcContext;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.linkgems.rical.common.eve.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Aspect
 @Configuration
-public class ProviderInterceptor {
+public class ProviderAspect {
 
     @Value("${dubbo.application.id}")
     private String appKey;

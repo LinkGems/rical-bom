@@ -1,4 +1,4 @@
-package org.linkgems.rical.common.eve.config;
+package org.linkgems.rical.common.eve.domain.dto;
 
 import lombok.Builder;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -15,7 +15,7 @@ import springfox.documentation.spring.web.plugins.Docket;
  * @date: 2021/3/25 7:46 PM
  */
 @Builder
-public class Swagger {
+public class SwaggerDTO {
 
     private String title;
 

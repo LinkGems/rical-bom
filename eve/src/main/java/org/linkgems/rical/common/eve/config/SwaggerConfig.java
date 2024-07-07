@@ -1,6 +1,7 @@
 package org.linkgems.rical.common.eve.config;
 
 
+import org.linkgems.rical.common.eve.domain.dto.SwaggerDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,16 +37,16 @@ public class SwaggerConfig {
     @Bean
     public Docket swaggerDocket(){
         Contact contact = new Contact(author, selfUrl, email);
-        Swagger swagger = Swagger.builder()
+        SwaggerDTO swaggerDTO = SwaggerDTO.builder()
                 .title(title)
                 .contact(contact)
                 .description(description)
                 .version(version)
                 .url(web)
                 .build();
-        Docket docket = swagger.createRestApiOfAnyPackage();
+        Docket docket = swaggerDTO.createRestApiOfAnyPackage();
         System.out.println(docket.toString());
-        return swagger.createRestApiOfAnyPackage();
+        return swaggerDTO.createRestApiOfAnyPackage();
     }
 
 }

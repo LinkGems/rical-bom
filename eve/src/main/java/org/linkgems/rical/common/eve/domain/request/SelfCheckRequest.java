@@ -1,4 +1,4 @@
-package org.linkgems.rical.common.eve.domain;
+package org.linkgems.rical.common.eve.domain.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,39 +22,30 @@ public class SelfCheckRequest extends BaseObject {
      */
     @NotNull
     private String appName;
-
-
     /**
      * 目标服务的ip,下面是后续想要优化的类型
      *
      * @see IPAddressName
      */
     private String ip;
-
     /**
      * 目标的bean的类名
      */
     @NotNull
     private String beanClazzName;
-
-
     /**
      * 目标的方法名
      */
     @NotNull
     private String methodName;
-
-
     /**
      * 方法参数类型列表
      */
     private String[] parameterTypes;
-
     /**
      * 方法参数数组
      */
     private Object[] parameters;
-
 
 }
 
