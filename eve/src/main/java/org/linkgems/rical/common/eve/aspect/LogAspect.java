@@ -1,5 +1,7 @@
 package org.linkgems.rical.common.eve.aspect;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +66,7 @@ public class LogAspect {
         } catch (BaseException bex) {
             timer.stop();
             log.info("!=={} - {} - cost={}ms : businessException={}, check the error.log - params={}", classMethodName, logDetail.getDesc(), timer.getLastTaskTimeMillis(), bex.getMessage(), getObjectStr(logDetail.args));
-            log.error("!!!{} - {} : {} - params={}", classMethodName, logDetail.getDesc(), getObjectStr(logDetail.args), exceptionStackTrace(bex), bex);
+            log.error("!!!{} - {} : {} - params={}", classMethodName, logDetail.getDesc(), getObjectStr(logDetail.args), bex);
             Throwable cause = bex.getCause();
             if (cause != null) {
                 throw cause;
@@ -136,7 +138,7 @@ public class LogAspect {
         StackTraceElement[] stackTrace = e.getStackTrace();
         if (stackTrace != null && stackTrace.length > 0) {
             List<String> traceElementList = Arrays.stream(stackTrace).map(st -> String.format(TRACE_TEMP, !StringUtils.isBlank(st.getFileName()) ? st.getFileName().split(".java")[0] : Strings.EMPTY, st.getMethodName(), st.getLineNumber())).collect(Collectors.toList());
-            return JacksonUtil.writeValueAsString(traceElementList);
+            return JSONUtil.toJsonStr(traceElementList);
         }
         return Strings.EMPTY;
     }
@@ -145,7 +147,7 @@ public class LogAspect {
         if (obj instanceof BaseObject) {
             return obj.toString();
         } else {
-            return JacksonUtil.writeValueAsString(obj);
+            return JSONUtil.toJsonStr(obj);
         }
     }
 
